@@ -11,5 +11,8 @@
   "repository_full_name": "Repository full name: {fullName}",
   "repository_stars": "Repository stars: {stars}",
   "wednesday_solutions": "Wednesday Solutions",
-  "ITunes": "ITunes"
+  "ITunes": "ITunes",
+  "artist_name": "Artist Name: {name}",
+  "search_song": "Search term: {songName}",
+  "genre": "Genre : {genre}"
 }
