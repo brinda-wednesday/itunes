@@ -26,7 +26,7 @@ import { injectSaga } from 'redux-injectors';
 const { Search } = Input;
 const { Meta } = Card;
 
-const SongsContainer = styled.div`
+export const SongsContainer = styled.div`
   && {
     margin: 20px 0;
     max-width: 1000px;

@@ -3,7 +3,9 @@
 exports[`<ITunes /> container tests should render and match the snapshot 1`] = `
 <body>
   <div>
-    <div>
+    <div
+      class="ITunes__Container-fbwjmv-2 ewwJQK"
+    >
       ITunes
       <span
         class="ant-input-group-wrapper ant-input-search"

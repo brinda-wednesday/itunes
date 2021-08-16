@@ -20,6 +20,7 @@ describe('<ITunes /> container tests', () => {
     const { baseElement } = renderProvider(<ITunes dispatchSongs={submitSpy} />);
     expect(baseElement).toMatchSnapshot();
   });
+
   it('should call dispatchClearSongs on empty change', async () => {
     const getiTunesSongsSpy = jest.fn();
     const cleariTunesSongsSpy = jest.fn();
