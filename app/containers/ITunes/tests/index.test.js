@@ -8,7 +8,9 @@
 import React from 'react';
 import { timeout, renderProvider } from '@utils/testUtils';
 import { fireEvent } from '@testing-library/dom';
+
 import { ITunesTest as ITunes } from '../index';
+import 'jest-styled-components';
 
 describe('<ITunes /> container tests', () => {
   let submitSpy;
@@ -20,7 +22,6 @@ describe('<ITunes /> container tests', () => {
     const { baseElement } = renderProvider(<ITunes dispatchSongs={submitSpy} />);
     expect(baseElement).toMatchSnapshot();
   });
-
   it('should call dispatchClearSongs on empty change', async () => {
     const getiTunesSongsSpy = jest.fn();
     const cleariTunesSongsSpy = jest.fn();

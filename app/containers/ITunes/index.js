@@ -11,7 +11,7 @@ import { injectIntl, FormattedMessage as T } from 'react-intl';
 
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-import { Card, Skeleton, Input, Avatar } from 'antd';
+import { Input } from 'antd';
 import styled from 'styled-components';
 import get from 'lodash/get';
 import debounce from 'lodash/debounce';
@@ -22,34 +22,25 @@ import { selectITunes, selectSongData, selectSongError, selectSongName } from '.
 import { iTunesCreators } from './reducer';
 import iTunesSaga from './saga';
 import { injectSaga } from 'redux-injectors';
+import ItunesCard from '@app/components/ItunesCard/index';
 
 const { Search } = Input;
-const { Meta } = Card;
 
-export const SongsContainer = styled.div`
+const GridLayout = styled.div`
   && {
-    margin: 20px 0;
-    max-width: 1000px;
+    margin: 1.25em 0;
+    width: 100%;
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
   }
 `;
-const ItunesCard = styled(Card)`
-  && {
-    margin: 10px 10px;
-    width: 400px;
-    border-radius: 20px;
-    background-color: #e5e7eb;
-    position: relative;
-  }
-`;
+
 const Container = styled.div`
   && {
-    max-width: 1000px;
     width: 100%;
     margin: 0 auto;
-    padding: 20px;
+    padding: 1.25em;
   }
 `;
 
@@ -85,24 +76,18 @@ export function ITunes({ songData = [], songError = null, songName, dispatchSong
 
     return (
       (items.length !== 0 || loading) && (
-        <SongsContainer>
+        <GridLayout>
           {items.map((item, index) => (
-            <ItunesCard key={index}>
-              <Skeleton loading={loading} active>
-                <Meta
-                  avatar={<Avatar src={item.artworkUrl100} style={{ width: '75px', height: '75px' }} />}
-                  title={item.trackName}
-                  description={item.artistName}
-                />
-
-                <audio controls style={{ width: '250px' }}>
-                  <source src={item.previewUrl} type="video/mp4" />
-                </audio>
-                <T id={'genre'} values={{ genre: item.primaryGenreName }} />
-              </Skeleton>
-            </ItunesCard>
+            <ItunesCard
+              key={index}
+              songTitle={item.trackName}
+              imgSrc={item.artworkUrl100}
+              songArtist={item.artistName}
+              audioSrc={item.previewUrl}
+              trackId={item.trackId}
+            ></ItunesCard>
           ))}
-        </SongsContainer>
+        </GridLayout>
       )
     );
   };
@@ -126,8 +111,7 @@ ITunes.propTypes = {
   intl: PropTypes.object,
   songData: PropTypes.object,
   songError: PropTypes.object,
-  songName: PropTypes.string,
-  history: PropTypes.object
+  songName: PropTypes.string
 };
 
 const mapStateToProps = createStructuredSelector({
