@@ -8,7 +8,7 @@ describe('ITunes selector tests', () => {
 
   beforeEach(() => {
     songName = 'faded';
-    songData = { totalCount: 1, results: [{ songName }] };
+    songData = { resultCount: 1, results: [{ songName }] };
     songError = 'There was some error while fetching the songs details';
     mockedState = {
       iTunes: {
