@@ -1,0 +1,45 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<ItunesCard /> should render and match the snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="ant-card ant-card-bordered ItunesCard__CustomCard-sijrgi-0 dbuYLV"
+      data-testid="itunes-card"
+    >
+      <div
+        class="ant-card-body"
+      >
+        <div
+          class="ant-card-meta"
+          data-testid="song-name"
+        >
+          <div
+            class="ant-card-meta-avatar"
+          >
+            <span
+              class="ant-avatar ant-avatar-circle ItunesCard__CustomAvatar-sijrgi-3 bdsWnH"
+              data-testid="artist-img"
+            >
+              <span
+                class="ant-avatar-string"
+                style="opacity: 0;"
+              />
+            </span>
+          </div>
+        </div>
+        <audio
+          class="ItunesCard__Audio-sijrgi-1 eukMhx"
+          controls=""
+        >
+          <source
+            class="ItunesCard__Source-sijrgi-2 cRCZEq"
+            data-testid="audio-src"
+            type="video/mp4"
+          />
+        </audio>
+      </div>
+    </div>
+  </div>
+</body>
+`;
