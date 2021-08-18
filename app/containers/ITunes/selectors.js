@@ -10,10 +10,10 @@ const selectITunesDomain = (state) => state.iTunes || initialState;
 
 export const selectITunes = () => createSelector(selectITunesDomain, (substate) => substate);
 
-export const selectSongData = () => createSelector(selectITunesDomain, (substate) => get(substate, 'songData', null));
+export const selectSongData = () => createSelector(selectITunesDomain, (substate) => get(substate, 'songData'));
 
-export const selectSongError = () => createSelector(selectITunesDomain, (substate) => get(substate, 'songError', null));
+export const selectSongError = () => createSelector(selectITunesDomain, (substate) => get(substate, 'songError'));
 
-export const selectSongName = () => createSelector(selectITunesDomain, (substate) => get(substate, 'songName', null));
+export const selectSongName = () => createSelector(selectITunesDomain, (substate) => get(substate, 'songName'));
 
 export default selectITunes;

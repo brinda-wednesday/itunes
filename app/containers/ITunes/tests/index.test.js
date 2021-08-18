@@ -8,9 +8,9 @@
 import React from 'react';
 import { timeout, renderProvider } from '@utils/testUtils';
 import { fireEvent } from '@testing-library/dom';
-
 import { ITunesTest as ITunes } from '../index';
 import 'jest-styled-components';
+import { testItunesData } from '@app/utils/testData';
 
 describe('<ITunes /> container tests', () => {
   let submitSpy;
@@ -47,5 +47,13 @@ describe('<ITunes /> container tests', () => {
     });
     await timeout(500);
     expect(submitSpy).toBeCalled();
+  });
+  it('should render grid', () => {
+    const { getAllByTestId } = renderProvider(<ITunes songData={testItunesData} />);
+    expect(getAllByTestId('grid')).toBeTruthy();
+  });
+  it('should render 5 itunes card for sample data', () => {
+    const { getAllByTestId } = renderProvider(<ITunes songData={testItunesData} />);
+    expect(getAllByTestId('itunes-card')).toHaveLength(5);
   });
 });

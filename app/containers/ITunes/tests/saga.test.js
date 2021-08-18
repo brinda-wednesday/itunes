@@ -37,7 +37,7 @@ describe('ITunes saga tests', () => {
     const res = getiTunesSongsGenerator.next().value;
     expect(res).toEqual(call(getSongs, songName));
     const songResponse = {
-      totalCount: 1,
+      resultCount: 1,
       result: [{ songName: songName }]
     };
     expect(getiTunesSongsGenerator.next(apiResponseGenerator(true, songResponse)).value).toEqual(

@@ -23,6 +23,7 @@ import { iTunesCreators } from './reducer';
 import iTunesSaga from './saga';
 import { injectSaga } from 'redux-injectors';
 import ItunesCard from '@app/components/ItunesCard/index';
+import If from '@app/components/If/index';
 
 const { Search } = Input;
 
@@ -46,13 +47,13 @@ const Container = styled.div`
 
 export function ITunes({ songData = [], songError = null, songName, dispatchSongs, dispatchClearSongs }) {
   const [loading, setLoading] = useState(false);
-  useEffect(() => {
-    const loaded = get(songData, 'results', null) || songError;
 
+  useEffect(() => {
+    const loaded = get(songData, 'results', songError);
     if (loading && loaded) {
       setLoading(false);
     }
-  }, [songData]);
+  }, [songData, songError]);
 
   useEffect(() => {
     if (songName && !songData?.results?.length) {
@@ -69,28 +70,10 @@ export function ITunes({ songData = [], songError = null, songName, dispatchSong
       dispatchClearSongs();
     }
   };
+
   const debouncedHandleOnChange = debounce(handleOnChange, 200);
+  const items = get(songData, 'results', []);
 
-  const renderSongList = () => {
-    const items = get(songData, 'results', []);
-
-    return (
-      (items.length !== 0 || loading) && (
-        <GridLayout>
-          {items.map((item, index) => (
-            <ItunesCard
-              key={index}
-              songTitle={item.trackName}
-              imgSrc={item.artworkUrl100}
-              songArtist={item.artistName}
-              audioSrc={item.previewUrl}
-              trackId={item.trackId}
-            ></ItunesCard>
-          ))}
-        </GridLayout>
-      )
-    );
-  };
   return (
     <Container>
       <T id={'ITunes'} />
@@ -100,7 +83,21 @@ export function ITunes({ songData = [], songError = null, songName, dispatchSong
         type="text"
         onChange={(evt) => debouncedHandleOnChange(evt.target.value)}
       />
-      {renderSongList()}
+      <If condition={items.length !== 0 || loading}>
+        <GridLayout data-testid="grid">
+          {items.map((item, index) => (
+            <ItunesCard
+              data-testid="itunes-card"
+              key={index}
+              songTitle={item.trackName}
+              imgSrc={item.artworkUrl100}
+              songArtist={item.artistName}
+              audioSrc={item.previewUrl}
+              trackId={item.trackId}
+            ></ItunesCard>
+          ))}
+        </GridLayout>
+      </If>
     </Container>
   );
 }
