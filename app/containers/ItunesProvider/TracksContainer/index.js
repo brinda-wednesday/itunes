@@ -17,10 +17,10 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 
-import { selectITunes, selectSongData, selectSongError, selectSongName } from './selectors';
+import { selectITunes, selectSongData, selectSongError, selectSongName } from '../selectors';
 
-import { iTunesCreators } from './reducer';
-import iTunesSaga from './saga';
+import { iTunesCreators } from '../reducer';
+import iTunesSaga from '../saga';
 import { injectSaga } from 'redux-injectors';
 import ItunesCard from '@app/components/ItunesCard/index';
 import If from '@app/components/If/index';
