@@ -45,8 +45,20 @@ const Container = styled.div`
   }
 `;
 
-export function ITunes({ songData = [], songError = null, songName, dispatchSongs, dispatchClearSongs }) {
+export function iTunes({ songData = [], songError = null, songName, dispatchSongs, dispatchClearSongs }) {
   const [loading, setLoading] = useState(false);
+
+  const items = get(songData, 'results', []);
+
+  const handleOnChange = (sName) => {
+    if (!isEmpty(sName)) {
+      dispatchSongs(sName);
+      setLoading(true);
+    } else {
+      dispatchClearSongs();
+    }
+  };
+  const debouncedHandleOnChange = debounce(handleOnChange, 200);
 
   useEffect(() => {
     const loaded = get(songData, 'results', songError);
@@ -61,18 +73,6 @@ export function ITunes({ songData = [], songError = null, songName, dispatchSong
       setLoading(true);
     }
   }, []);
-
-  const handleOnChange = (sName) => {
-    if (!isEmpty(sName)) {
-      dispatchSongs(sName);
-      setLoading(true);
-    } else {
-      dispatchClearSongs();
-    }
-  };
-
-  const debouncedHandleOnChange = debounce(handleOnChange, 200);
-  const items = get(songData, 'results', []);
 
   return (
     <Container>
@@ -102,7 +102,7 @@ export function ITunes({ songData = [], songError = null, songName, dispatchSong
   );
 }
 
-ITunes.propTypes = {
+iTunes.propTypes = {
   dispatchSongs: PropTypes.func,
   dispatchClearSongs: PropTypes.func,
   intl: PropTypes.object,
@@ -128,6 +128,6 @@ function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect, injectSaga({ key: 'iTunes', saga: iTunesSaga }))(ITunes);
+export default compose(withConnect, injectSaga({ key: 'iTunes', saga: iTunesSaga }))(iTunes);
 
-export const ITunesTest = compose(injectIntl)(ITunes);
+export const ITunesTest = compose(injectIntl)(iTunes);
