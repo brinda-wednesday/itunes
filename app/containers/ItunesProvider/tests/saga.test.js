@@ -8,18 +8,18 @@ import { getSongs } from '@app/services/itunesApi';
 import { apiResponseGenerator } from '@app/utils/testUtils';
 import iTunesSaga, { getiTunesSongs, getiTuneTrackDetail } from '../saga';
 import { iTunesTypes } from '../reducer';
-// import { testItunesData } from '@app/utils/testData';
-// import { selectSongData } from '../selectors';
+//import { testItunesData } from '@app/utils/testData';
+//import { selectSongData } from '../selectors';
 
 describe('ITunes saga tests', () => {
   const generator = iTunesSaga();
   const songName = 'faded';
   let getiTunesSongsGenerator = getiTunesSongs({ songName });
 
-  // const data = testItunesData.results[0];
+  //const data = testItunesData.results[0];
   // const trackId = data.trackId;
   // let getiTunesTrackDetailGenerator = getiTuneTrackDetail({ trackId });
-  // let state;
+  //let state = getSongs('faded');
   // beforeEach(() => {
   //   state = getSongs('faded');
   // });
