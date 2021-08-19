@@ -15,6 +15,7 @@ export function* getiTunesSongs(action) {
     yield put(failureGetItunesSongs(data));
   }
 }
+
 export function* getiTuneTrackDetail(action) {
   const state = yield select(selectSongData());
   const results = state.results;

@@ -82,18 +82,19 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
       dispatchTrackDetail(params.trackId);
     }
   }, []);
+
   return (
     <If condition={!isEmpty(trackData)}>
-      <Container>
-        <CustomCard cover={<Image alt="example" src={trackData.artworkUrl100} />}>
+      <Container data-testid="container">
+        <CustomCard data-testid="track-card" cover={<Image alt="example" src={trackData.artworkUrl100} />}>
           <CustomTitle level={5}>{trackData.kind}</CustomTitle>
           <Meta title={trackData.trackName} description={trackData.artistName} />
           <Audio controls>
             <Source data-testid="audio-src" src={trackData.previewUrl} />
           </Audio>
           <CustomText> Collection Name : {trackData.collectionName}</CustomText>
-          <CustomText italic type="success">
-            {' '}
+          <CustomText data-testid="genre">Genre : {trackData.primaryGenreName}</CustomText>
+          <CustomText data-testid="price" italic type="success">
             Price : ${trackData.trackPrice}
           </CustomText>
         </CustomCard>
@@ -115,7 +116,7 @@ const mapStateToProps = createStructuredSelector({
   trackError: selectTrackError()
 });
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   const { requestGetItuneDetail } = iTunesCreators;
   return {
     dispatchTrackDetail: (trackDetail) => dispatch(requestGetItuneDetail(trackDetail))
