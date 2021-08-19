@@ -8,10 +8,8 @@ import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
-
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
-
 import { selectTrackData, selectTrackDetail, selectTrackError } from '../selectors';
 import { useParams } from 'react-router-dom';
 import { iTunesCreators } from '../reducer';
@@ -28,10 +26,8 @@ const { Meta } = Card;
 const Container = styled.div`
   && {
     width: 100%;
-
     margin: 0 auto;
     padding: 1.25em;
-
     display: flex;
     justify-content: center;
   }

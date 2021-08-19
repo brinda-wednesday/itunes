@@ -7,7 +7,6 @@
 
 import React from 'react';
 import { renderProvider } from '@utils/testUtils';
-// import { fireEvent } from '@testing-library/dom'
 import { TrackDetailContainerTest as TrackDetailContainer } from '../index';
 import { testItunesData } from '@app/utils/testData';
 import { BrowserRouter } from 'react-router-dom';
