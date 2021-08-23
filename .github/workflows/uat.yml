@@ -25,7 +25,7 @@ jobs:
       
       - name: Get branch name #2
         id: vars
-	      run: echo ::set-output name=branch::${{github.event.pull_request.head.ref}}
+        run: echo ::set-output name=branch::${{github.event.pull_request.head.ref}}
       - name: Use node.js
         uses: actions/setup-node@v1
         with:
