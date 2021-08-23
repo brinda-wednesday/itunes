@@ -19,6 +19,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       PATHS: '/*'
       AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      
     steps:
       - uses: actions/checkout@v1 #1
       - name: Get branch name #2
