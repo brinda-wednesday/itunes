@@ -1,6 +1,6 @@
 name: React Template CD
 on:
-  pull_request:
+  push:
     branches: [master]
 jobs:
   build-and-deploy:
