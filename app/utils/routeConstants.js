@@ -1,18 +1,10 @@
 export default {
-  repos: {
-    route: '/',
-    props: {
-      maxwidth: 500,
-      padding: 20
-    },
-    exact: true
-  },
   itunes: {
-    route: '/itunes',
+    route: '/',
     exact: true
   },
   trackDetails: {
-    route: '/itunes/:trackId',
+    route: '/:trackId',
     exact: true
   }
 };
