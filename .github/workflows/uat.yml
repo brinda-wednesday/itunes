@@ -22,10 +22,15 @@ jobs:
       
     steps:
       - uses: actions/checkout@v1 #1
+      
       - name: Get branch name #2
         id: vars
-				run: echo ::set-output name=branch::${{github.event.pull_request.head.ref}}
-      - name: Install dependencies #3
+	      run: echo ::set-output name=branch::${{github.event.pull_request.head.ref}}
+      - name: Use node.js
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: install dependencies
         run: yarn
       - name: Build # 4
         run: yarn build:uat
