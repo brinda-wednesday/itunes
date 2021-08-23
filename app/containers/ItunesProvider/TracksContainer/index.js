@@ -103,7 +103,7 @@ export function iTunes({
       <If condition={items.length !== 0 || loading}>
         <GridLayout data-testid="grid">
           {items.map((item, index) => (
-            <Link key={index} to={`/itunes/${item.trackId}`}>
+            <Link key={index} to={`/${item.trackId}`}>
               <ItunesCard
                 data-testid="itunes-card"
                 songTitle={item.trackName}
