@@ -16,4 +16,11 @@ export const selectSongError = () => createSelector(selectITunesDomain, (substat
 
 export const selectSongName = () => createSelector(selectITunesDomain, (substate) => get(substate, 'songName'));
 
+export const selectTrackDetail = () => createSelector(selectITunesDomain, (substate) => get(substate, 'trackDetail'));
+
+export const selectTrackData = () => createSelector(selectITunesDomain, (substate) => get(substate, 'trackData'));
+
+export const selectTrackError = () =>
+  createSelector(selectITunesDomain, (substate) => get(substate, 'trackDetailError'));
+
 export default selectITunes;

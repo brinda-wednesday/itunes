@@ -1,9 +1,11 @@
 // import produce from 'immer'
+import { testItunesData } from '@app/utils/testData';
 import { iTunesReducer, iTunesTypes, initialState } from '../reducer';
 
 /* eslint-disable default-case, no-param-reassign */
 describe('ITunes reducer tests', () => {
   let state;
+  const data = testItunesData.results[0];
   beforeEach(() => {
     state = initialState;
   });
@@ -41,6 +43,26 @@ describe('ITunes reducer tests', () => {
       iTunesReducer(state, {
         type: iTunesTypes.FAILURE_GET_ITUNES_SONGS,
         error
+      })
+    ).toEqual(expectedResult);
+  });
+  it('should return the initial state when an REQUEST_GET_ITUNE_DETAIL is triggered', () => {
+    const trackDetail = data.trackId;
+    const expectedResult = { ...state, trackDetail };
+    expect(
+      iTunesReducer(state, {
+        type: iTunesTypes.REQUEST_GET_ITUNE_DETAIL,
+        trackDetail
+      })
+    ).toEqual(expectedResult);
+  });
+  it('should return the trackData when an SUCCESS_GET_ITUNE_DETAIL is triggered', () => {
+    const trackData = data;
+    const expectedResult = { ...state, trackData };
+    expect(
+      iTunesReducer(state, {
+        type: iTunesTypes.SUCCESS_GET_ITUNE_DETAIL,
+        trackData
       })
     ).toEqual(expectedResult);
   });

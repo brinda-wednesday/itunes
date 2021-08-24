@@ -10,5 +10,9 @@ export default {
   itunes: {
     route: '/itunes',
     exact: true
+  },
+  trackDetails: {
+    route: '/itunes/:trackId',
+    exact: true
   }
 };

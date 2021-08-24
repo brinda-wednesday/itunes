@@ -17,13 +17,22 @@ import get from 'lodash/get';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 
-import { selectITunes, selectSongData, selectSongError, selectSongName } from './selectors';
+import {
+  selectITunes,
+  selectSongData,
+  selectSongError,
+  selectSongName,
+  selectTrackData,
+  selectTrackDetail,
+  selectTrackError
+} from '../selectors';
 
-import { iTunesCreators } from './reducer';
-import iTunesSaga from './saga';
+import { iTunesCreators } from '../reducer';
+import iTunesSaga from '../saga';
 import { injectSaga } from 'redux-injectors';
 import ItunesCard from '@app/components/ItunesCard/index';
 import If from '@app/components/If/index';
+import { Link } from 'react-router-dom';
 
 const { Search } = Input;
 
@@ -45,7 +54,15 @@ const Container = styled.div`
   }
 `;
 
-export function iTunes({ songData = [], songError = null, songName, dispatchSongs, dispatchClearSongs }) {
+export function iTunes({
+  songData = [],
+  songError = null,
+  songName,
+  dispatchSongs,
+  dispatchClearSongs,
+  trackData = {},
+  trackDetail = null
+}) {
   const [loading, setLoading] = useState(false);
 
   const items = get(songData, 'results', []);
@@ -86,15 +103,16 @@ export function iTunes({ songData = [], songError = null, songName, dispatchSong
       <If condition={items.length !== 0 || loading}>
         <GridLayout data-testid="grid">
           {items.map((item, index) => (
-            <ItunesCard
-              data-testid="itunes-card"
-              key={index}
-              songTitle={item.trackName}
-              imgSrc={item.artworkUrl100}
-              songArtist={item.artistName}
-              audioSrc={item.previewUrl}
-              trackId={item.trackId}
-            ></ItunesCard>
+            <Link key={index} to={`/itunes/${item.trackId}`}>
+              <ItunesCard
+                data-testid="itunes-card"
+                songTitle={item.trackName}
+                imgSrc={item.artworkUrl100}
+                songArtist={item.artistName}
+                audioSrc={item.previewUrl}
+                trackId={item.trackId}
+              ></ItunesCard>
+            </Link>
           ))}
         </GridLayout>
       </If>
@@ -115,7 +133,10 @@ const mapStateToProps = createStructuredSelector({
   iTunes: selectITunes(),
   songData: selectSongData(),
   songError: selectSongError(),
-  songName: selectSongName()
+  songName: selectSongName(),
+  trackDetail: selectTrackDetail(),
+  trackData: selectTrackData(),
+  trackError: selectTrackError()
 });
 
 function mapDispatchToProps(dispatch) {

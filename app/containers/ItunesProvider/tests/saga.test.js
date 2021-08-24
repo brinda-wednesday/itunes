@@ -6,7 +6,7 @@
 import { takeLatest, call, put } from 'redux-saga/effects';
 import { getSongs } from '@app/services/itunesApi';
 import { apiResponseGenerator } from '@app/utils/testUtils';
-import iTunesSaga, { getiTunesSongs } from '../saga';
+import iTunesSaga, { getiTunesSongs, getiTuneTrackDetail } from '../saga';
 import { iTunesTypes } from '../reducer';
 
 describe('ITunes saga tests', () => {
@@ -46,5 +46,8 @@ describe('ITunes saga tests', () => {
         data: songResponse
       })
     );
+  });
+  it('should start REQUEST_GET_ITUNE_DETAIL action', () => {
+    expect(generator.next().value).toEqual(takeLatest(iTunesTypes.REQUEST_GET_ITUNE_DETAIL, getiTuneTrackDetail));
   });
 });

@@ -11,7 +11,7 @@ import { fireEvent } from '@testing-library/dom';
 import { ITunesTest as ITunes } from '../index';
 import 'jest-styled-components';
 import { testItunesData } from '@app/utils/testData';
-
+import { BrowserRouter } from 'react-router-dom';
 describe('<ITunes /> container tests', () => {
   let submitSpy;
 
@@ -19,7 +19,11 @@ describe('<ITunes /> container tests', () => {
     submitSpy = jest.fn();
   });
   it('should render and match the snapshot', () => {
-    const { baseElement } = renderProvider(<ITunes dispatchSongs={submitSpy} />);
+    const { baseElement } = renderProvider(
+      <BrowserRouter>
+        <ITunes dispatchSongs={submitSpy} />
+      </BrowserRouter>
+    );
     expect(baseElement).toMatchSnapshot();
   });
   it('should call dispatchClearSongs on empty change', async () => {
@@ -49,11 +53,19 @@ describe('<ITunes /> container tests', () => {
     expect(submitSpy).toBeCalled();
   });
   it('should render grid', () => {
-    const { getAllByTestId } = renderProvider(<ITunes songData={testItunesData} />);
+    const { getAllByTestId } = renderProvider(
+      <BrowserRouter>
+        <ITunes songData={testItunesData} />
+      </BrowserRouter>
+    );
     expect(getAllByTestId('grid')).toBeTruthy();
   });
   it('should render 5 itunes card for sample data', () => {
-    const { getAllByTestId } = renderProvider(<ITunes songData={testItunesData} />);
+    const { getAllByTestId } = renderProvider(
+      <BrowserRouter>
+        <ITunes songData={testItunesData} />
+      </BrowserRouter>
+    );
     expect(getAllByTestId('itunes-card')).toHaveLength(5);
   });
 });
