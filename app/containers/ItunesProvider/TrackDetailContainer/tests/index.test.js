@@ -6,10 +6,10 @@
  */
 
 import React from 'react';
-import { renderProvider } from '@utils/testUtils';
+import { renderProvider, timeout } from '@utils/testUtils';
 import { TrackDetailContainerTest as TrackDetailContainer } from '../index';
 import { testItunesData } from '@app/utils/testData';
-import { BrowserRouter } from 'react-router-dom';
+import { BrowserRouter, Route } from 'react-router-dom';
 
 describe('<TrackDetailContainer /> container tests', () => {
   let submitSpy;
@@ -51,14 +51,34 @@ describe('<TrackDetailContainer /> container tests', () => {
     );
     expect(getByTestId('genre').textContent).toBe(genre);
   });
-  it('should call dispatchTrackDetail', () => {
+  it('should show - track not found when track data is empty', () => {
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer dispatchTrackDetail={submitSpy} />
+      </BrowserRouter>
+    );
+    expect(getByTestId('not-found')).toBeTruthy;
+  });
+
+  it('should call dispatchTrackDetail', async () => {
     const { baseElement } = renderProvider(
       <BrowserRouter>
         <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
       </BrowserRouter>
     );
     expect(baseElement).toMatchSnapshot();
-    submitSpy();
+    await timeout(500);
     expect(submitSpy).toBeCalled();
+  });
+  it('should fail to call dispatchTrackDetail on param unavailability', () => {
+    const { baseElement } = renderProvider(
+      <BrowserRouter>
+        <Route path="/">
+          <TrackDetailContainer dispatchTrackDetail={submitSpy} />
+        </Route>
+      </BrowserRouter>
+    );
+    expect(baseElement).toMatchSnapshot();
+    expect(submitSpy).toBeFalsy;
   });
 });

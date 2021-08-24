@@ -85,6 +85,23 @@ exports[`<TrackDetailContainer /> container tests should call dispatchTrackDetai
 </body>
 `;
 
+exports[`<TrackDetailContainer /> container tests should fail to call dispatchTrackDetail on param unavailability 1`] = `
+<body>
+  <div>
+    <div
+      class="TrackDetailContainer__Container-sc-1wt099m-0 hPWKJQ"
+    >
+      <p
+        class="T__StyledText-gjlic1-0 kYcyRq"
+        data-testid="not-found"
+      >
+        Track Not found
+      </p>
+    </div>
+  </div>
+</body>
+`;
+
 exports[`<TrackDetailContainer /> container tests should render and match the snapshot 1`] = `
 <body>
   <div>

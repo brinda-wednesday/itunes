@@ -14,5 +14,6 @@
   "ITunes": "ITunes",
   "artist_name": "Artist Name: {name}",
   "search_song": "Search term: {songName}",
-  "genre": "Genre : {genre}"
+  "genre": "Genre : {genre}",
+  "not-found": "Track Not found"
 }

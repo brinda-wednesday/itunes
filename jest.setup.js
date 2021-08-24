@@ -5,6 +5,7 @@ jest.mock('react-router-dom', () => {
   return {
     __esModule: true,
     ...originalModule,
+    useParams: () => ({ trackId: 10 }),
     useLocation: jest.fn().mockReturnValue({
       pathname: '/',
       search: '',

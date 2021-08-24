@@ -20,6 +20,7 @@ import styled from 'styled-components';
 import { primarygrey } from '@app/themes/colors';
 import If from '@app/components/If/index';
 import { Card, Typography } from 'antd';
+import { T } from '@app/components/T/index';
 
 const { Title, Text } = Typography;
 const { Meta } = Card;
@@ -80,22 +81,29 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
   }, []);
 
   return (
-    <If condition={!isEmpty(trackData)}>
-      <Container data-testid="container">
-        <CustomCard data-testid="track-card" cover={<Image alt="example" src={trackData.artworkUrl100} />}>
-          <CustomTitle level={5}>{trackData.kind}</CustomTitle>
-          <Meta title={trackData.trackName} description={trackData.artistName} />
-          <Audio controls>
-            <Source data-testid="audio-src" src={trackData.previewUrl} />
-          </Audio>
-          <CustomText> Collection Name : {trackData.collectionName}</CustomText>
-          <CustomText data-testid="genre">Genre : {trackData.primaryGenreName}</CustomText>
-          <CustomText data-testid="price" italic type="success">
-            Price : ${trackData.trackPrice}
-          </CustomText>
-        </CustomCard>
-      </Container>
-    </If>
+    <>
+      <If condition={!isEmpty(trackData)}>
+        <Container data-testid="container">
+          <CustomCard data-testid="track-card" cover={<Image alt="example" src={trackData.artworkUrl100} />}>
+            <CustomTitle level={5}>{trackData.kind}</CustomTitle>
+            <Meta title={trackData.trackName} description={trackData.artistName} />
+            <Audio controls>
+              <Source data-testid="audio-src" src={trackData.previewUrl} />
+            </Audio>
+            <CustomText> Collection Name : {trackData.collectionName}</CustomText>
+            <CustomText data-testid="genre">Genre : {trackData.primaryGenreName}</CustomText>
+            <CustomText data-testid="price" italic type="success">
+              Price : ${trackData.trackPrice}
+            </CustomText>
+          </CustomCard>
+        </Container>
+      </If>
+      <If condition={isEmpty(trackData)}>
+        <Container>
+          <T id="not-found" data-testid="not-found" />
+        </Container>
+      </If>
+    </>
   );
 }
 

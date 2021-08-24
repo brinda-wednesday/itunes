@@ -66,4 +66,14 @@ describe('ITunes reducer tests', () => {
       })
     ).toEqual(expectedResult);
   });
+  it('should trigger FAILURE_GET_ITUNE_DETAIL when trackDetail is not found', () => {
+    const trackDetailError = 'something_went_wrong';
+    const expectedResult = { ...state, trackDetailError };
+    expect(
+      iTunesReducer(state, {
+        type: iTunesTypes.FAILURE_GET_ITUNE_DETAIL,
+        trackDetailError
+      })
+    ).toEqual(expectedResult);
+  });
 });
