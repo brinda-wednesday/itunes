@@ -55,7 +55,7 @@ const Container = styled.div`
 `;
 
 export function iTunes({
-  songData = [],
+  songData = {},
   songError = null,
   songName,
   dispatchSongs,
@@ -124,7 +124,6 @@ iTunes.propTypes = {
   dispatchSongs: PropTypes.func,
   dispatchClearSongs: PropTypes.func,
   intl: PropTypes.object,
-  songData: PropTypes.object,
   songError: PropTypes.object,
   songName: PropTypes.string
 };

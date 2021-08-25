@@ -20,7 +20,7 @@ export const { Types: iTunesTypes, Creators: iTunesCreators } = createActions({
   successGetItunesSongs: ['data'],
   failureGetItunesSongs: ['error'],
   requestGetItuneDetail: ['trackDetail'],
-  successGetItuneDetail: ['trackData', 'updateSongData'],
+  successGetItuneDetail: ['trackData'],
   failureGetItuneDetail: ['trackDetailError'],
   clearItunesSongs: []
 });
@@ -43,9 +43,6 @@ export const iTunesReducer = (state = initialState, action) =>
         break;
       case iTunesTypes.SUCCESS_GET_ITUNE_DETAIL:
         draft.trackData = action.trackData;
-        if (action.updateSongData) {
-          draft.songData = [...state.songData, action.trackData];
-        }
         break;
       case iTunesTypes.FAILURE_GET_ITUNE_DETAIL:
         draft.trackDetailError = action.trackDetailError;

@@ -19,9 +19,16 @@ import iTunesSaga from '../saga';
 import styled from 'styled-components';
 import { primarygrey } from '@app/themes/colors';
 import If from '@app/components/If/index';
-import { Card, Typography } from 'antd';
+import { Card, Typography, Button, Tooltip, Popover } from 'antd';
 import { T } from '@app/components/T/index';
 
+import {
+  PlayCircleOutlined,
+  PauseCircleOutlined,
+  StepForwardOutlined,
+  RetweetOutlined,
+  CaretDownOutlined
+} from '@ant-design/icons';
 const { Title, Text } = Typography;
 const { Meta } = Card;
 const Container = styled.div`
@@ -45,7 +52,9 @@ const CustomCard = styled(Card)`
     width: 80em;
     border-radius: 2em;
     display: flex;
+    justify-content: center;
     background-color: ${primarygrey};
+    padding: 3em;
   }
 `;
 const Audio = styled.audio`
@@ -70,6 +79,13 @@ const CustomTitle = styled(Title)`
     color: blue;
   }
 `;
+const CustomButton = styled(Button)`
+  && {
+    background-color: black;
+    color: aqua;
+    margin: 0.5em;
+  }
+`;
 
 export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
   const params = useParams();
@@ -79,6 +95,31 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
       dispatchTrackDetail(params.trackId);
     }
   }, []);
+  var audioEle = document.getElementById('audio-controls');
+  const handlePlay = () => {
+    audioEle.play();
+  };
+  const handlePause = () => {
+    audioEle.pause();
+  };
+  const handleIncreaseFiveSec = () => {
+    audioEle.currentTime += 5;
+  };
+  const handleRepeat = () => {
+    audioEle.loop = true;
+  };
+  const handlePlaybackrate = () => {
+    audioEle.playbackRate = 0.5;
+  };
+  const content = (
+    <>
+      <CustomText> Collection Name : {trackData.collectionName}</CustomText>
+      <CustomText data-testid="genre">Genre : {trackData.primaryGenreName}</CustomText>
+      <CustomText data-testid="price" italic type="success">
+        Price : ${trackData.trackPrice}
+      </CustomText>
+    </>
+  );
 
   return (
     <>
@@ -87,14 +128,62 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
           <CustomCard data-testid="track-card" cover={<Image alt="example" src={trackData.artworkUrl100} />}>
             <CustomTitle level={5}>{trackData.kind}</CustomTitle>
             <Meta title={trackData.trackName} description={trackData.artistName} />
-            <Audio controls>
+            <Audio controls id="audio-controls">
               <Source data-testid="audio-src" src={trackData.previewUrl} />
             </Audio>
-            <CustomText> Collection Name : {trackData.collectionName}</CustomText>
-            <CustomText data-testid="genre">Genre : {trackData.primaryGenreName}</CustomText>
-            <CustomText data-testid="price" italic type="success">
-              Price : ${trackData.trackPrice}
-            </CustomText>
+            <Tooltip title="play">
+              <CustomButton
+                data-testid="play-btn"
+                shape="circle"
+                size="large"
+                icon={<PlayCircleOutlined />}
+                onClick={handlePlay}
+              />
+            </Tooltip>
+            <Tooltip title="pause">
+              <CustomButton
+                type="primary"
+                shape="circle"
+                size="large"
+                data-testid="pause-btn"
+                icon={<PauseCircleOutlined />}
+                onClick={handlePause}
+              />
+            </Tooltip>
+            <Tooltip title="Forward">
+              <CustomButton
+                type="primary"
+                shape="circle"
+                size="large"
+                data-testid="forward-btn"
+                icon={<StepForwardOutlined />}
+                onClick={handleIncreaseFiveSec}
+              />
+            </Tooltip>
+            <Tooltip title="Repeat">
+              <CustomButton
+                type="primary"
+                shape="circle"
+                size="large"
+                data-testid="repeat-btn"
+                icon={<RetweetOutlined />}
+                onClick={handleRepeat}
+              />
+            </Tooltip>
+            <Tooltip title="Playbackrate">
+              <CustomButton
+                type="primary"
+                shape="circle"
+                size="large"
+                data-testid="playback-btn"
+                icon={<CaretDownOutlined />}
+                onClick={handlePlaybackrate}
+              />
+            </Tooltip>
+
+            <Popover content={content}>
+              <CustomButton>More</CustomButton>
+            </Popover>
           </CustomCard>
         </Container>
       </If>

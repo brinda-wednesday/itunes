@@ -33,24 +33,52 @@ describe('<TrackDetailContainer /> container tests', () => {
     );
     expect(getByTestId('audio-src').src).toBe(data.previewUrl);
   });
-  it('should render track price', () => {
-    const price = 'Price : $' + data.trackPrice;
+  it('should render play btn', () => {
     const { getByTestId } = renderProvider(
       <BrowserRouter>
-        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy}></TrackDetailContainer>
       </BrowserRouter>
     );
-    expect(getByTestId('price').textContent).toBe(price);
+    const ele = getByTestId('play-btn');
+    expect(ele).toBeTruthy();
   });
-  it('should render track genre', () => {
-    const genre = 'Genre : ' + data.primaryGenreName;
+  it('should render pause btn', () => {
     const { getByTestId } = renderProvider(
       <BrowserRouter>
-        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy}></TrackDetailContainer>
       </BrowserRouter>
     );
-    expect(getByTestId('genre').textContent).toBe(genre);
+    const ele = getByTestId('pause-btn');
+    expect(ele).toBeTruthy();
   });
+  it('should render repeat btn', () => {
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy}></TrackDetailContainer>
+      </BrowserRouter>
+    );
+    const ele = getByTestId('repeat-btn');
+    expect(ele).toBeTruthy();
+  });
+  it('should render playback btn', () => {
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy}></TrackDetailContainer>
+      </BrowserRouter>
+    );
+    const ele = getByTestId('playback-btn');
+    expect(ele).toBeTruthy();
+  });
+  it('should render forward btn', () => {
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy}></TrackDetailContainer>
+      </BrowserRouter>
+    );
+    const ele = getByTestId('forward-btn');
+    expect(ele).toBeTruthy();
+  });
+
   it('should show - track not found when track data is empty', () => {
     const { getByTestId } = renderProvider(
       <BrowserRouter>

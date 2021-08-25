@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add redux-saga-testing
+  /usr/local/bin/node /usr/local/bin/yarn add react-h5-audio-player
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/Users/apple/Documents/wednesday-projects/itunes/node_modules/css/node_modules/source-map-resolve/LICENSE'
+  Error: EACCES: permission denied, unlink '/Users/apple/Documents/wednesday-projects/itunes/node_modules/css/node_modules/source-map-resolve/readme.md'
 
 npm manifest: 
   {
@@ -42,6 +42,7 @@ npm manifest:
       "prebuild": "npm run build:clean",
       "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.config.prod.js --color --progress --stats-children --stats-error-details",
       "build:dev": "cross-env NODE_ENV=development webpack --config internals/webpack/webpack.config.dev.js --color --progress",
+      "build:uat": "export ENVIRONMENT_NAME=uat && cross-env NODE_ENV=production webpack --config internals/webpack/webpack.config.prod.js --color --progress",
       "build:clean": "rimraf ./build",
       "predeploy": "yarn build && yarn build-storybook -o build/stories",
       "deploy": "gh-pages -d build",

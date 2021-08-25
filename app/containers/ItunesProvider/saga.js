@@ -26,7 +26,7 @@ export function* getiTuneTrackDetail(action) {
     const response = yield call(getSongs, action.trackDetail);
     const { data, ok } = response;
     if (ok) {
-      yield put(successGetItuneDetail(data.results[0], true));
+      yield put(successGetItuneDetail(data.results[0]));
     } else {
       yield put(failureGetItuneDetail(data));
     }
