@@ -7,7 +7,7 @@
 
 import React from 'react';
 import { renderProvider, timeout } from '@utils/testUtils';
-import { TrackDetailContainerTest as TrackDetailContainer } from '../index';
+import { mapDispatchToProps, TrackDetailContainerTest as TrackDetailContainer } from '../index';
 import { testItunesData } from '@app/utils/testData';
 import { fireEvent } from '@testing-library/dom';
 import { BrowserRouter, Route } from 'react-router-dom';
@@ -111,5 +111,65 @@ describe('<TrackDetailContainer /> container tests', () => {
     );
     expect(baseElement).toMatchSnapshot();
     expect(submitSpy).toBeFalsy;
+  });
+  it('should dispatchTrackDetail ', () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).dispatchTrackDetail({ trackDetail: 1440649635 });
+    expect(dispatch).toHaveBeenCalled();
+  });
+  it('should use useRef hook and ensure play function called', () => {
+    const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValue({ current: { play: jest.fn() } });
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+      </BrowserRouter>
+    );
+    const ele = getByTestId('play-btn');
+    fireEvent.click(ele);
+    expect(useRefSpy).toHaveBeenCalled();
+  });
+  it('should use useRef hook and ensure pause function called', () => {
+    const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValue({ current: { pause: jest.fn() } });
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+      </BrowserRouter>
+    );
+    const ele = getByTestId('pause-btn');
+    fireEvent.click(ele);
+    expect(useRefSpy).toHaveBeenCalled();
+  });
+  it('should use useRef hook and ensure increase 5sec', () => {
+    const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValue({ current: { currentTime: 0 } });
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+      </BrowserRouter>
+    );
+    const ele = getByTestId('forward-btn');
+    fireEvent.click(ele);
+    expect(useRefSpy).toHaveBeenCalled();
+  });
+  it('should use useRef hook and ensure loop is set to true', () => {
+    const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValue({ current: { loop: false } });
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+      </BrowserRouter>
+    );
+    const ele = getByTestId('repeat-btn');
+    fireEvent.click(ele);
+    expect(useRefSpy).toHaveBeenCalled();
+  });
+  it('should use useRef hook and ensure playbackRate is halved', () => {
+    const useRefSpy = jest.spyOn(React, 'useRef').mockReturnValue({ current: { playbackRate: 0 } });
+    const { getByTestId } = renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+      </BrowserRouter>
+    );
+    const ele = getByTestId('playback-btn');
+    fireEvent.click(ele);
+    expect(useRefSpy).toHaveBeenCalled();
   });
 });

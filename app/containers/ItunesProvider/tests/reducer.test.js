@@ -76,4 +76,12 @@ describe('ITunes reducer tests', () => {
       })
     ).toEqual(expectedResult);
   });
+  it('should return initial state after dispatchClearItuneSongs is dispatched', () => {
+    const expectedResult = initialState;
+    expect(
+      iTunesReducer(state, {
+        type: iTunesTypes.CLEAR_ITUNES_SONGS
+      })
+    ).toEqual(expectedResult);
+  });
 });

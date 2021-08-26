@@ -8,10 +8,12 @@
 import React from 'react';
 import { timeout, renderProvider } from '@utils/testUtils';
 import { fireEvent } from '@testing-library/dom';
-import { ITunesTest as ITunes } from '../index';
+import { ITunesTest as ITunes, mapDispatchToProps } from '../index';
 import 'jest-styled-components';
 import { testItunesData } from '@app/utils/testData';
 import { BrowserRouter } from 'react-router-dom';
+import { iTunesTypes } from '../../reducer';
+
 describe('<ITunes /> container tests', () => {
   let submitSpy;
 
@@ -67,5 +69,15 @@ describe('<ITunes /> container tests', () => {
       </BrowserRouter>
     );
     expect(getAllByTestId('itunes-card')).toHaveLength(5);
+  });
+  it('should  dispatchSongs when songName is passed', () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).dispatchSongs({ songName: 'faded' });
+    expect(dispatch).toHaveBeenCalled();
+  });
+  it('should dispatchClearSongs when songName is empty', () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).dispatchClearSongs();
+    expect(dispatch.mock.calls[0][0]).toEqual({ type: iTunesTypes.CLEAR_ITUNES_SONGS });
   });
 });

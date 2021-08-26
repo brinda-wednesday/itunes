@@ -138,7 +138,7 @@ const mapStateToProps = createStructuredSelector({
   trackError: selectTrackError()
 });
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   const { requestGetItunesSongs, clearItunesSongs } = iTunesCreators;
   return {
     dispatchSongs: (songName) => dispatch(requestGetItunesSongs(songName)),

@@ -7,7 +7,10 @@
 import React from 'react';
 import { timeout, renderProvider } from '@utils/testUtils';
 import { fireEvent } from '@testing-library/dom';
-import { HomeContainerTest as HomeContainer } from '../index';
+import { HomeContainerTest as HomeContainer, mapDispatchToProps } from '../index';
+
+import { homeContainerTypes } from '../reducer';
+import { BrowserRouter, Route, useHistory } from 'react-router-dom';
 
 describe('<HomeContainer /> tests', () => {
   let submitSpy;
@@ -45,5 +48,28 @@ describe('<HomeContainer /> tests', () => {
     });
     await timeout(500);
     expect(submitSpy).toBeCalled();
+  });
+  it('should dispatch githubRepos when repoName is passed', () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).dispatchGithubRepos({ repoName: 'Mac' });
+    expect(dispatch).toHaveBeenCalled();
+  });
+  it('should dispatch clear Repos when repoName is empty', () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).dispatchClearGithubRepos();
+    expect(dispatch.mock.calls[0][0]).toEqual({ type: homeContainerTypes.CLEAR_GITHUB_REPOS });
+  });
+  it('should trigger reload', () => {
+    const history = useHistory();
+    const { getByText } = renderProvider(
+      <BrowserRouter>
+        <Route history={history}>
+          <HomeContainer />
+        </Route>
+      </BrowserRouter>
+    );
+    const ClickEle = getByText('Go to Storybook');
+    fireEvent.click(ClickEle);
+    expect(history.location.pathname).toBe('/');
   });
 });
