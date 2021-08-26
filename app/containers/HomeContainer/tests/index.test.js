@@ -72,4 +72,15 @@ describe('<HomeContainer /> tests', () => {
     fireEvent.click(ClickEle);
     expect(history.location.pathname).toBe('/');
   });
+  it('should trigger dispatchGithubRepos on mount', async () => {
+    const getGithubReposSpy = jest.fn();
+    renderProvider(<HomeContainer dispatchGithubRepos={getGithubReposSpy} repoName="mac" />);
+    await timeout(500);
+    expect(getGithubReposSpy).toHaveBeenCalledTimes(1);
+  });
+  it('should show repoError ', () => {
+    const { getByText } = renderProvider(<HomeContainer reposError="error" />);
+
+    expect(getByText('error')).toBeTruthy();
+  });
 });

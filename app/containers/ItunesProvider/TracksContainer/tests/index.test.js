@@ -54,6 +54,12 @@ describe('<ITunes /> container tests', () => {
     await timeout(500);
     expect(submitSpy).toBeCalled();
   });
+  it('should call dispatchSongs on mount', async () => {
+    renderProvider(<ITunes dispatchSongs={submitSpy} songName="faded" />);
+    await timeout(500);
+    expect(submitSpy).toBeCalled();
+  });
+
   it('should render grid', () => {
     const { getAllByTestId } = renderProvider(
       <BrowserRouter>

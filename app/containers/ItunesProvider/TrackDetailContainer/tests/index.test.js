@@ -172,4 +172,14 @@ describe('<TrackDetailContainer /> container tests', () => {
     fireEvent.click(ele);
     expect(useRefSpy).toHaveBeenCalled();
   });
+  it('should trigger dispatchTrackDetail on mount', async () => {
+    const submitSpy = jest.fn();
+    renderProvider(
+      <BrowserRouter>
+        <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
+      </BrowserRouter>
+    );
+    await timeout(500);
+    expect(submitSpy).toHaveBeenCalledTimes(1);
+  });
 });
