@@ -49,7 +49,6 @@ exports[`<TrackDetailContainer /> container tests should call dispatchTrackDetai
           <audio
             class="TrackDetailContainer__Audio-sc-1wt099m-3 ihqLXm"
             controls=""
-            id="audio-controls"
           >
             <source
               class="TrackDetailContainer__Source-sc-1wt099m-4 eLriFX"
@@ -266,7 +265,6 @@ exports[`<TrackDetailContainer /> container tests should render and match the sn
           <audio
             class="TrackDetailContainer__Audio-sc-1wt099m-3 ihqLXm"
             controls=""
-            id="audio-controls"
           >
             <source
               class="TrackDetailContainer__Source-sc-1wt099m-4 eLriFX"

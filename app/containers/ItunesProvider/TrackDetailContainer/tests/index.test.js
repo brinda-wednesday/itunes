@@ -9,6 +9,7 @@ import React from 'react';
 import { renderProvider, timeout } from '@utils/testUtils';
 import { TrackDetailContainerTest as TrackDetailContainer } from '../index';
 import { testItunesData } from '@app/utils/testData';
+import { fireEvent } from '@testing-library/dom';
 import { BrowserRouter, Route } from 'react-router-dom';
 
 describe('<TrackDetailContainer /> container tests', () => {
@@ -33,13 +34,15 @@ describe('<TrackDetailContainer /> container tests', () => {
     );
     expect(getByTestId('audio-src').src).toBe(data.previewUrl);
   });
-  it('should render play btn', () => {
+  it('should render play btn', async () => {
     const { getByTestId } = renderProvider(
       <BrowserRouter>
         <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy}></TrackDetailContainer>
       </BrowserRouter>
     );
     const ele = getByTestId('play-btn');
+    fireEvent.click(ele);
+    await timeout(500);
     expect(ele).toBeTruthy();
   });
   it('should render pause btn', () => {

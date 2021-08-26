@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useRef } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
@@ -89,27 +89,27 @@ const CustomButton = styled(Button)`
 
 export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
   const params = useParams();
-
+  const audioRef = useRef();
   useEffect(() => {
     if (params.trackId) {
       dispatchTrackDetail(params.trackId);
     }
   }, []);
-  var audioEle = document.getElementById('audio-controls');
+
   const handlePlay = () => {
-    audioEle.play();
+    audioRef.current.play();
   };
   const handlePause = () => {
-    audioEle.pause();
+    audioRef.current.pause();
   };
   const handleIncreaseFiveSec = () => {
-    audioEle.currentTime += 5;
+    audioRef.current.currentTime += 5;
   };
   const handleRepeat = () => {
-    audioEle.loop = true;
+    audioRef.current.loop = true;
   };
   const handlePlaybackrate = () => {
-    audioEle.playbackRate = 0.5;
+    audioRef.current.playbackRate = 0.5;
   };
   const content = (
     <>
@@ -128,7 +128,7 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
           <CustomCard data-testid="track-card" cover={<Image alt="example" src={trackData.artworkUrl100} />}>
             <CustomTitle level={5}>{trackData.kind}</CustomTitle>
             <Meta title={trackData.trackName} description={trackData.artistName} />
-            <Audio controls id="audio-controls">
+            <Audio controls ref={audioRef}>
               <Source data-testid="audio-src" src={trackData.previewUrl} />
             </Audio>
             <Tooltip title="play">
