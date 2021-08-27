@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect, useRef } from 'react';
+import React, { memo, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
@@ -22,13 +22,7 @@ import If from '@app/components/If/index';
 import { Card, Typography, Button, Tooltip, Popover } from 'antd';
 import { T } from '@app/components/T/index';
 
-import {
-  PlayCircleOutlined,
-  PauseCircleOutlined,
-  StepForwardOutlined,
-  RetweetOutlined,
-  CaretDownOutlined
-} from '@ant-design/icons';
+import { PlayCircleOutlined, PauseCircleOutlined, StepForwardOutlined, CaretDownOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 const { Meta } = Card;
 const Container = styled.div`
@@ -89,7 +83,8 @@ const CustomButton = styled(Button)`
 
 export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
   const params = useParams();
-  const audioRef = useRef();
+  const audioRef = React.useRef();
+  const [trackState, setTrackState] = React.useState('');
   useEffect(() => {
     if (params.trackId) {
       dispatchTrackDetail(params.trackId);
@@ -98,18 +93,19 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
 
   const handlePlay = () => {
     audioRef.current.play();
+    setTrackState('Track Playing');
   };
   const handlePause = () => {
     audioRef.current.pause();
+    setTrackState('Track Paused');
   };
   const handleIncreaseFiveSec = () => {
     audioRef.current.currentTime += 5;
-  };
-  const handleRepeat = () => {
-    audioRef.current.loop = true;
+    setTrackState('Track Forwarded 5s');
   };
   const handlePlaybackrate = () => {
     audioRef.current.playbackRate = 0.5;
+    setTrackState('Track rate halved');
   };
   const content = (
     <>
@@ -160,16 +156,6 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
                 onClick={handleIncreaseFiveSec}
               />
             </Tooltip>
-            <Tooltip title="Repeat">
-              <CustomButton
-                type="primary"
-                shape="circle"
-                size="large"
-                data-testid="repeat-btn"
-                icon={<RetweetOutlined />}
-                onClick={handleRepeat}
-              />
-            </Tooltip>
             <Tooltip title="Playbackrate">
               <CustomButton
                 type="primary"
@@ -184,6 +170,7 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
             <Popover content={content}>
               <CustomButton>More</CustomButton>
             </Popover>
+            <CustomText>{trackState}</CustomText>
           </CustomCard>
         </Container>
       </If>

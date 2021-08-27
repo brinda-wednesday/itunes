@@ -4,19 +4,26 @@
  *
  */
 
-import React from 'react';
+import React, { useState as useStateMock } from 'react';
 import { timeout, renderProvider } from '@utils/testUtils';
 import { fireEvent } from '@testing-library/dom';
 import { HomeContainerTest as HomeContainer, mapDispatchToProps } from '../index';
 
 import { homeContainerTypes } from '../reducer';
-import { BrowserRouter, Route, useHistory } from 'react-router-dom';
+
+jest.mock('react', () => ({
+  ...jest.requireActual('react'),
+  useState: jest.fn()
+}));
 
 describe('<HomeContainer /> tests', () => {
   let submitSpy;
+  let setState;
 
   beforeEach(() => {
     submitSpy = jest.fn();
+    setState = jest.fn();
+    useStateMock.mockImplementation((init) => [init, setState]);
   });
   it('should render and match the snapshot', () => {
     const { baseElement } = renderProvider(<HomeContainer dispatchGithubRepos={submitSpy} />);
@@ -59,28 +66,37 @@ describe('<HomeContainer /> tests', () => {
     mapDispatchToProps(dispatch).dispatchClearGithubRepos();
     expect(dispatch.mock.calls[0][0]).toEqual({ type: homeContainerTypes.CLEAR_GITHUB_REPOS });
   });
-  it('should trigger reload', () => {
-    const history = useHistory();
-    const { getByText } = renderProvider(
-      <BrowserRouter>
-        <Route history={history}>
-          <HomeContainer />
-        </Route>
-      </BrowserRouter>
-    );
-    const ClickEle = getByText('Go to Storybook');
-    fireEvent.click(ClickEle);
-    expect(history.location.pathname).toBe('/');
-  });
+
   it('should trigger dispatchGithubRepos on mount', async () => {
     const getGithubReposSpy = jest.fn();
     renderProvider(<HomeContainer dispatchGithubRepos={getGithubReposSpy} repoName="mac" />);
     await timeout(500);
     expect(getGithubReposSpy).toHaveBeenCalledTimes(1);
   });
+
   it('should show repoError ', () => {
     const { getByText } = renderProvider(<HomeContainer reposError="error" />);
-
     expect(getByText('error')).toBeTruthy();
+  });
+
+  it('should set loading to true when repoName present', async () => {
+    const getGithubReposSpy = jest.fn();
+    renderProvider(<HomeContainer repoName="mac" dispatchGithubRepos={getGithubReposSpy} />);
+    await timeout(500);
+    expect(getGithubReposSpy).toHaveBeenCalledTimes(1);
+    expect(setState).toBeCalledWith(true);
+  });
+  it('should set loading to false when reposData passed', async () => {
+    renderProvider(<HomeContainer reposData={{ items: [] }} />);
+    await timeout(500);
+    expect(setState).toBeCalledWith(false);
+  });
+  it('should refresh page on click of button - go to story books', () => {
+    const pushSpy = jest.fn();
+    jest.spyOn(require('react-router-dom'), 'useHistory').mockReturnValue({ push: pushSpy });
+    const { getByText } = renderProvider(<HomeContainer />);
+    const clickEle = getByText('Go to Storybook');
+    fireEvent.click(clickEle);
+    expect(pushSpy).toHaveBeenCalledTimes(1);
   });
 });

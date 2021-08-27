@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useState } from 'react';
+import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -51,14 +51,7 @@ export function HomeContainer({
   maxwidth,
   padding
 }) {
-  const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const loaded = get(reposData, 'items', null) || reposError;
-    if (loading && loaded) {
-      setLoading(false);
-    }
-  }, [reposData]);
+  const [loading, setLoading] = React.useState(false);
 
   useEffect(() => {
     if (repoName && !reposData?.items?.length) {
@@ -125,7 +118,7 @@ export function HomeContainer({
     );
   };
   const refreshPage = () => {
-    history.push('stories');
+    history.push('/stories');
     window.location.reload();
   };
   return (
@@ -140,7 +133,6 @@ export function HomeContainer({
           defaultValue={repoName}
           type="text"
           onChange={(evt) => debouncedHandleOnChange(evt.target.value)}
-          onSearch={(searchText) => debouncedHandleOnChange(searchText)}
         />
       </CustomCard>
       {renderRepoList()}
