@@ -43,11 +43,10 @@ describe('ITunes saga tests', () => {
   it('should ensure that the action SUCCESS_GET_ITUNES_SONGS is dispatched when the api call succeeds', () => {
     getiTunesSongsGenerator = getiTunesSongs({ songName });
     const res = getiTunesSongsGenerator.next().value;
-
     expect(res).toEqual(call(getSongs, songName));
     const songResponse = {
       resultCount: 1,
-      result: [{ songName: songName }]
+      results: [{ songName: songName }]
     };
     expect(getiTunesSongsGenerator.next(apiResponseGenerator(true, songResponse)).value).toEqual(
       put({
@@ -79,6 +78,17 @@ describe('ITunes saga tests', () => {
     getiTunesTrackGenerator = getiTuneTrackDetail({ trackDetail });
     getiTunesTrackGenerator.next({ results: testItunesData.results });
     expect(getiTunesTrackGenerator.next({ results: testItunesData.results }).value).toEqual(
+      put({
+        type: iTunesTypes.SUCCESS_GET_ITUNE_DETAIL,
+        trackData: testItunesData.results[0]
+      })
+    );
+  });
+  it('should ensure that the action SUCCESS_GET_ITUNE_DETAIL is dispatched when the track detail is not present in store and api call  SUCCEEDS', () => {
+    getiTunesTrackGenerator = getiTuneTrackDetail({ trackDetail });
+    getiTunesTrackGenerator.next({ results: [] });
+    expect(getiTunesTrackGenerator.next({ results: [] }).value).toEqual(call(getSongs, trackDetail));
+    expect(getiTunesTrackGenerator.next(apiResponseGenerator(true, testItunesData)).value).toEqual(
       put({
         type: iTunesTypes.SUCCESS_GET_ITUNE_DETAIL,
         trackData: testItunesData.results[0]

@@ -10,6 +10,7 @@ import { fireEvent } from '@testing-library/dom';
 import { HomeContainerTest as HomeContainer, mapDispatchToProps } from '../index';
 
 import { homeContainerTypes } from '../reducer';
+import { githubReposData } from '@app/utils/testData';
 
 jest.mock('react', () => ({
   ...jest.requireActual('react'),
@@ -91,6 +92,7 @@ describe('<HomeContainer /> tests', () => {
     await timeout(500);
     expect(setState).toBeCalledWith(false);
   });
+
   it('should refresh page on click of button - go to story books', () => {
     const pushSpy = jest.fn();
     jest.spyOn(require('react-router-dom'), 'useHistory').mockReturnValue({ push: pushSpy });
@@ -98,5 +100,18 @@ describe('<HomeContainer /> tests', () => {
     const clickEle = getByText('Go to Storybook');
     fireEvent.click(clickEle);
     expect(pushSpy).toHaveBeenCalledTimes(1);
+  });
+  it('should render  repo cards', async () => {
+    const getGithubReposSpy = jest.fn();
+    const clearGithubReposSpy = jest.fn();
+    const { getAllByTestId } = renderProvider(
+      <HomeContainer
+        dispatchClearGithubRepos={clearGithubReposSpy}
+        dispatchGithubRepos={getGithubReposSpy}
+        reposData={githubReposData}
+      />
+    );
+    await timeout(500);
+    expect(getAllByTestId('custom-card')).toHaveLength(3);
   });
 });

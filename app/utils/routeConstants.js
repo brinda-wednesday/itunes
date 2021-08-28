@@ -6,5 +6,9 @@ export default {
   trackDetails: {
     route: '/:trackId',
     exact: true
+  },
+  repos: {
+    route: '/github/repo',
+    exact: true
   }
 };

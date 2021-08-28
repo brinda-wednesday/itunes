@@ -119,4 +119,24 @@ describe('styles', () => {
   it('should set borderRadius', () => {
     expect(styles.borderRadius('5')).toEqual(['border-radius:', '5;', ';']);
   });
+  it('should configure flex', () => {
+    expect(styles.configureFlex()).toEqual([
+      'display:flex;flex:1;flex-direction:row;',
+      ' flex-direction:',
+      'row',
+      ';justify-content:',
+      'center',
+      ';align-items:',
+      'center',
+      ';align-content:',
+      'center',
+      ';flex-basis:',
+      '0',
+      ';flex-grow:',
+      '1',
+      ';flex-shrink:',
+      '0',
+      ';'
+    ]);
+  });
 });
