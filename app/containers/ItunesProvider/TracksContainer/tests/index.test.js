@@ -12,7 +12,7 @@ import { ITunesTest as ITunes, mapDispatchToProps } from '../index';
 import 'jest-styled-components';
 import { testItunesData } from '@app/utils/testData';
 import { BrowserRouter } from 'react-router-dom';
-import { iTunesTypes } from '../../reducer';
+import { iTunesTypes } from '@app/containers/ItunesProvider/reducer';
 
 describe('<ITunes /> container tests', () => {
   let submitSpy;
@@ -58,6 +58,7 @@ describe('<ITunes /> container tests', () => {
     renderProvider(<ITunes dispatchSongs={submitSpy} songName="faded" />);
     await timeout(500);
     expect(submitSpy).toBeCalled();
+    expect(submitSpy).toBeCalledWith('faded');
   });
 
   it('should render grid', () => {

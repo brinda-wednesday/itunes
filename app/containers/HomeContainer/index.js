@@ -17,7 +17,9 @@ import { selectHomeContainer, selectReposData, selectReposError, selectRepoName 
 import { homeContainerCreators } from './reducer';
 import homeContainerSaga from './saga';
 import If from '@app/components/If/index';
-import CustomCard from '@app/components/CustomCard/index';
+import CustomCard from '@app/components/CustomCard';
+import For from '@app/components/For/index';
+
 const { Search } = Input;
 
 const Container = styled.div`
@@ -110,28 +112,34 @@ export function HomeContainer({
         />
       </Card>
 
-      <If condition={items.length !== 0 || loading}>
+      <If condition={items.length || loading}>
         <Card>
           <Skeleton loading={loading} active>
-            {repoName && (
+            <If condition={repoName}>
               <div>
                 <T id="search_query" values={{ repoName }} />
               </div>
-            )}
-            {totalCount !== 0 && (
+            </If>
+            <If condition={totalCount !== 0}>
               <div>
                 <T id="matching_repos" values={{ totalCount }} />
               </div>
-            )}
-            {items.map((item, index) => (
-              <CustomCard
-                data-testid="custom-card"
-                key={index}
-                name={item.name}
-                fullName={item.fullName}
-                stargazersCount={item.stargazersCount}
-              ></CustomCard>
-            ))}
+            </If>
+            <For
+              of={items}
+              isRow={false}
+              renderItem={(item, index) => {
+                return (
+                  <CustomCard
+                    data-testid="custom-card"
+                    key={index}
+                    name={item.name}
+                    fullName={item.fullName}
+                    stargazersCount={item.stargazersCount}
+                  />
+                );
+              }}
+            />
           </Skeleton>
         </Card>
       </If>

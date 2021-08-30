@@ -5,18 +5,8 @@ jest.mock('react-router-dom', () => {
   return {
     __esModule: true,
     ...originalModule,
-    setState: jest.fn(),
     useParams: () => ({ trackId: 1440649635 }),
-    useState: jest.fn().mockImplementation((init) => [init, jest.fn()]),
-    useRef: jest.fn().mockReturnValue({
-      current: {
-        play: jest.fn(),
-        pause: jest.fn(),
-        currentTime: 0,
-        loop: false,
-        playbackRate: 0
-      }
-    }),
+
     useLocation: jest.fn().mockReturnValue({
       pathname: '/',
       search: '',

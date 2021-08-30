@@ -81,10 +81,10 @@ const CustomButton = styled(Button)`
   }
 `;
 
-export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
+export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail, intl }) {
   const params = useParams();
   const audioRef = React.useRef();
-  const [trackState, setTrackState] = React.useState('');
+
   useEffect(() => {
     if (params.trackId) {
       dispatchTrackDetail(params.trackId);
@@ -93,26 +93,22 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
 
   const handlePlay = () => {
     audioRef.current.play();
-    setTrackState('Track Playing');
   };
   const handlePause = () => {
     audioRef.current.pause();
-    setTrackState('Track Paused');
   };
   const handleIncreaseFiveSec = () => {
     audioRef.current.currentTime += 5;
-    setTrackState('Track Forwarded 5s');
   };
   const handlePlaybackrate = () => {
     audioRef.current.playbackRate = 0.5;
-    setTrackState('Track rate halved');
   };
   const content = (
     <>
-      <CustomText> Collection Name : {trackData.collectionName}</CustomText>
-      <CustomText data-testid="genre">Genre : {trackData.primaryGenreName}</CustomText>
-      <CustomText data-testid="price" italic type="success">
-        Price : ${trackData.trackPrice}
+      <CustomText> {intl.formatMessage({ id: 'collection-name' }, { name: trackData.collectionName })}</CustomText>
+      <CustomText>{intl.formatMessage({ id: 'genre' }, { genre: trackData.primaryGenreName })}</CustomText>
+      <CustomText italic type="success">
+        {intl.formatMessage({ id: 'price' }, { price: trackData.trackPrice })}
       </CustomText>
     </>
   );
@@ -127,7 +123,7 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
             <Audio controls ref={audioRef}>
               <Source data-testid="audio-src" src={trackData.previewUrl} />
             </Audio>
-            <Tooltip title="play">
+            <Tooltip title={intl.formatMessage({ id: 'play' })}>
               <CustomButton
                 data-testid="play-btn"
                 shape="circle"
@@ -136,7 +132,7 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
                 onClick={handlePlay}
               />
             </Tooltip>
-            <Tooltip title="pause">
+            <Tooltip title={intl.formatMessage({ id: 'pause' })}>
               <CustomButton
                 type="primary"
                 shape="circle"
@@ -146,7 +142,7 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
                 onClick={handlePause}
               />
             </Tooltip>
-            <Tooltip title="Forward">
+            <Tooltip title={intl.formatMessage({ id: 'forward' })}>
               <CustomButton
                 type="primary"
                 shape="circle"
@@ -156,7 +152,7 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
                 onClick={handleIncreaseFiveSec}
               />
             </Tooltip>
-            <Tooltip title="Playbackrate">
+            <Tooltip title={intl.formatMessage({ id: 'playbackrate' })}>
               <CustomButton
                 type="primary"
                 shape="circle"
@@ -168,9 +164,8 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
             </Tooltip>
 
             <Popover content={content}>
-              <CustomButton>More</CustomButton>
+              <CustomButton> {intl.formatMessage({ id: 'more' })}</CustomButton>
             </Popover>
-            <CustomText>{trackState}</CustomText>
           </CustomCard>
         </Container>
       </If>
@@ -187,6 +182,7 @@ TrackDetailContainer.propTypes = {
   dispatchTrackDetail: PropTypes.func,
   trackDetail: PropTypes.string,
   trackData: PropTypes.object,
+  intl: PropTypes.object,
   trackError: PropTypes.string
 };
 
@@ -205,6 +201,11 @@ export function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect, memo, injectSaga({ key: 'iTunes', saga: iTunesSaga }))(TrackDetailContainer);
+export default compose(
+  injectIntl,
+  withConnect,
+  memo,
+  injectSaga({ key: 'iTunes', saga: iTunesSaga })
+)(TrackDetailContainer);
 
 export const TrackDetailContainerTest = compose(injectIntl)(TrackDetailContainer);

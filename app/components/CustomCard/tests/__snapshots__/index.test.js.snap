@@ -4,7 +4,7 @@ exports[`<CustomCard /> should render and match the snapshot 1`] = `
 <body>
   <div>
     <div
-      class="ant-card ant-card-bordered CustomCard__StyledCard-sc-19zlds6-0 lbeOIa"
+      class="ant-card ant-card-bordered CustomCard__StyledCard-sc-19zlds6-0 jTcFqr"
       data-testid="custom-card"
     >
       <div
@@ -12,19 +12,19 @@ exports[`<CustomCard /> should render and match the snapshot 1`] = `
       >
         <p
           class="T__StyledText-gjlic1-0 kYcyRq"
-          data-testid="t"
+          data-testid="repo-name"
         >
           Repository Name: 
         </p>
         <p
           class="T__StyledText-gjlic1-0 kYcyRq"
-          data-testid="t"
+          data-testid="full-name"
         >
           Repository full name: 
         </p>
         <p
           class="T__StyledText-gjlic1-0 kYcyRq"
-          data-testid="t"
+          data-testid="stargazer-count"
         >
           Repository stars: 
         </p>

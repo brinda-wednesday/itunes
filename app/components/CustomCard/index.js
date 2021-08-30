@@ -13,7 +13,7 @@ import styled from 'styled-components';
 const StyledCard = styled(Card)`
   && {
     margin: 20px 0;
-    max-width: 900px;
+    max-width: ${(props) => props.maxWidth} ? ${(props) => props.maxwidth}px : 900px;
     color: grey;
   }
 `;
@@ -21,9 +21,9 @@ const StyledCard = styled(Card)`
 export function CustomCard({ name, stargazersCount, fullName }) {
   return (
     <StyledCard data-testid="custom-card">
-      <T id="repository_name" values={{ name: name }} />
-      <T id="repository_full_name" values={{ fullName: fullName }} />
-      <T id="repository_stars" values={{ stars: stargazersCount }} />
+      <T id="repository_name" data-testid="repo-name" values={{ name: name }} />
+      <T id="repository_full_name" data-testid="full-name" values={{ fullName: fullName }} />
+      <T id="repository_stars" data-testid="stargazer-count" values={{ stars: stargazersCount }} />
     </StyledCard>
   );
 }

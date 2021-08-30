@@ -164,14 +164,9 @@ exports[`<TrackDetailContainer /> container tests should render and match the sn
             type="button"
           >
             <span>
-              More
+               More
             </span>
           </button>
-          <span
-            class="ant-typography TrackDetailContainer__CustomText-sc-1wt099m-5 kfUHax"
-          >
-            
-          </span>
         </div>
       </div>
     </div>

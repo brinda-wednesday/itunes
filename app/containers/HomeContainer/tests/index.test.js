@@ -4,28 +4,21 @@
  *
  */
 
-import React, { useState as useStateMock } from 'react';
+import React from 'react';
 import { timeout, renderProvider } from '@utils/testUtils';
 import { fireEvent } from '@testing-library/dom';
 import { HomeContainerTest as HomeContainer, mapDispatchToProps } from '../index';
 
-import { homeContainerTypes } from '../reducer';
+import { homeContainerTypes } from '@app/containers/HomeContainer/reducer';
 import { githubReposData } from '@app/utils/testData';
-
-jest.mock('react', () => ({
-  ...jest.requireActual('react'),
-  useState: jest.fn()
-}));
 
 describe('<HomeContainer /> tests', () => {
   let submitSpy;
-  let setState;
 
   beforeEach(() => {
     submitSpy = jest.fn();
-    setState = jest.fn();
-    useStateMock.mockImplementation((init) => [init, setState]);
   });
+
   it('should render and match the snapshot', () => {
     const { baseElement } = renderProvider(<HomeContainer dispatchGithubRepos={submitSpy} />);
     expect(baseElement).toMatchSnapshot();
@@ -73,24 +66,13 @@ describe('<HomeContainer /> tests', () => {
     renderProvider(<HomeContainer dispatchGithubRepos={getGithubReposSpy} repoName="mac" />);
     await timeout(500);
     expect(getGithubReposSpy).toHaveBeenCalledTimes(1);
+    expect(getGithubReposSpy).toBeCalledWith('mac');
   });
 
   it('should show repoError ', () => {
-    const { getByText } = renderProvider(<HomeContainer reposError="error" />);
+    const repoError = 'error';
+    const { getByText } = renderProvider(<HomeContainer reposError={repoError} />);
     expect(getByText('error')).toBeTruthy();
-  });
-
-  it('should set loading to true when repoName present', async () => {
-    const getGithubReposSpy = jest.fn();
-    renderProvider(<HomeContainer repoName="mac" dispatchGithubRepos={getGithubReposSpy} />);
-    await timeout(500);
-    expect(getGithubReposSpy).toHaveBeenCalledTimes(1);
-    expect(setState).toBeCalledWith(true);
-  });
-  it('should set loading to false when reposData passed', async () => {
-    renderProvider(<HomeContainer reposData={{ items: [] }} />);
-    await timeout(500);
-    expect(setState).toBeCalledWith(false);
   });
 
   it('should refresh page on click of button - go to story books', () => {
@@ -112,6 +94,6 @@ describe('<HomeContainer /> tests', () => {
       />
     );
     await timeout(500);
-    expect(getAllByTestId('custom-card')).toHaveLength(3);
+    expect(getAllByTestId('custom-card')).toHaveLength(githubReposData.items.length);
   });
 });

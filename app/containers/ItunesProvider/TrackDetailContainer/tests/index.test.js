@@ -9,7 +9,6 @@ import React from 'react';
 import { renderProvider, timeout } from '@utils/testUtils';
 import { mapDispatchToProps, TrackDetailContainerTest as TrackDetailContainer } from '../index';
 import { testItunesData } from '@app/utils/testData';
-import { fireEvent } from '@testing-library/dom';
 
 describe('<TrackDetailContainer /> container tests', () => {
   let submitSpy;
@@ -43,65 +42,25 @@ describe('<TrackDetailContainer /> container tests', () => {
   });
 
   it('should call dispatchTrackDetail on mount', async () => {
+    const trackId = 1440649635;
     renderProvider(<TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />);
     await timeout(500);
     expect(submitSpy).toBeCalled();
+    expect(submitSpy).toBeCalledWith(trackId);
   });
 
   it('should dispatchTrackDetail match to the props', () => {
     const dispatch = jest.fn();
     mapDispatchToProps(dispatch).dispatchTrackDetail({ trackDetail: 1440649635 });
     expect(dispatch).toHaveBeenCalled();
+    expect(dispatch.mock.calls[0][0].trackDetail).toStrictEqual({ trackDetail: 1440649635 });
   });
 
-  it('should invoke dispatchTrackDetail when params.trackId is present', async () => {
+  it('should invoke dispatchTrackDetail when params.trackId is absent', async () => {
     const submitSpy = jest.fn();
     jest.spyOn(require('react-router-dom'), 'useParams').mockReturnValue({ trackId: null });
     renderProvider(<TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />);
     await timeout(500);
     expect(submitSpy).toHaveBeenCalledTimes(0);
-  });
-  it('should invoke dispatchTrackDetail when params.trackId is present', async () => {
-    const submitSpy = jest.fn();
-    jest.spyOn(require('react-router-dom'), 'useParams').mockReturnValue({ trackId: 10 });
-    const { TrackDetailContainerTest: TrackDetailContainer } = require('../index');
-    renderProvider(<TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />);
-    await timeout(500);
-    expect(submitSpy).toHaveBeenCalledTimes(1);
-  });
-  it('should call play the track on button click', () => {
-    const playBtnSpy = jest.spyOn(require('react'), 'useRef').mockReturnValue({ current: { play: jest.fn() } });
-    const { getByTestId } = renderProvider(<TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />);
-    const playBtn = getByTestId('play-btn');
-    fireEvent.click(playBtn);
-    expect(playBtnSpy).toHaveBeenCalled();
-  });
-  it('should pause the track on pause btn click', () => {
-    const { getByTestId, getByText } = renderProvider(
-      <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
-    );
-    const pauseBtn = getByTestId('pause-btn');
-    fireEvent.click(pauseBtn);
-    expect(getByText('Track Paused')).toBeTruthy();
-  });
-  it('should forward the track 5s on forward btn click', () => {
-    const spy = jest.spyOn(require('react'), 'useRef').mockReturnValue({ current: { currentTime: 0 } });
-    const { getByTestId, getByText } = renderProvider(
-      <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
-    );
-    const forwardBtn = getByTestId('forward-btn');
-    fireEvent.click(forwardBtn);
-    expect(getByText('Track Forwarded 5s')).toBeTruthy();
-    expect(spy).toHaveBeenCalled();
-  });
-  it('should reduce the playbackRate on btn click', () => {
-    const spy = jest.spyOn(require('react'), 'useRef').mockReturnValue({ current: { playbackRate: 0 } });
-    const { getByTestId, getByText } = renderProvider(
-      <TrackDetailContainer trackData={data} dispatchTrackDetail={submitSpy} />
-    );
-    const playbackBtn = getByTestId('playback-btn');
-    fireEvent.click(playbackBtn);
-    expect(getByText('Track rate halved')).toBeTruthy();
-    expect(spy).toHaveBeenCalled();
   });
 });
