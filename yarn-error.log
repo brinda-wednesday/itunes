@@ -1,5 +1,5 @@
 Arguments: 
-  /usr/local/bin/node /usr/local/bin/yarn add react-h5-audio-player
+  /usr/local/bin/node /usr/local/bin/yarn add react-audio-player
 
 PATH: 
   /usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
@@ -14,7 +14,7 @@ Platform:
   darwin x64
 
 Trace: 
-  Error: EACCES: permission denied, unlink '/Users/apple/Documents/wednesday-projects/itunes/node_modules/css/node_modules/source-map-resolve/readme.md'
+  Error: EACCES: permission denied, unlink '/Users/apple/Documents/wednesday-projects/itunes/node_modules/css/node_modules/source-map-resolve/LICENSE'
 
 npm manifest: 
   {

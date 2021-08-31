@@ -87,4 +87,12 @@ describe('<ITunes /> container tests', () => {
     mapDispatchToProps(dispatch).dispatchClearSongs();
     expect(dispatch.mock.calls[0][0]).toEqual({ type: iTunesTypes.CLEAR_ITUNES_SONGS });
   });
+
+  it('should set loading as false if loading is true, if either songdata or songerror is present', async () => {
+    const { getByText, rerender } = renderProvider(<ITunes dispatchSongs={submitSpy} songName="faded" />);
+    await timeout(500);
+    renderProvider(<ITunes dispatchSongs={submitSpy} songError="error" songName="faded" />, rerender);
+    await timeout(500);
+    expect(getByText('error')).toBeTruthy();
+  });
 });

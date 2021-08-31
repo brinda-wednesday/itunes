@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage as T } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -33,6 +33,7 @@ import { injectSaga } from 'redux-injectors';
 import ItunesCard from '@app/components/ItunesCard/index';
 import If from '@app/components/If/index';
 import { Link } from 'react-router-dom';
+import { T } from '@components/T';
 
 const { Search } = Input;
 
@@ -64,7 +65,6 @@ export function iTunes({
   trackDetail = null
 }) {
   const [loading, setLoading] = useState(false);
-
   const items = get(songData, 'results', []);
 
   const handleOnChange = (sName) => {
@@ -115,6 +115,9 @@ export function iTunes({
             </Link>
           ))}
         </GridLayout>
+      </If>
+      <If condition={songError && !loading}>
+        <T id={songError} />
       </If>
     </Container>
   );

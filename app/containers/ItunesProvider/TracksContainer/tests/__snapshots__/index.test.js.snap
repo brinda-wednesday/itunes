@@ -1,6 +1,11 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`<ITunes /> container tests should render and match the snapshot 1`] = `
+.c1.c1 {
+  font-size: 1rem;
+  font-weight: normal;
+}
+
 .c0.c0 {
   width: 100%;
   margin: 0 auto;
@@ -12,7 +17,12 @@ exports[`<ITunes /> container tests should render and match the snapshot 1`] = `
     <div
       class="c0"
     >
-      ITunes
+      <p
+        class="c1"
+        data-testid="t"
+      >
+        ITunes
+      </p>
       <span
         class="ant-input-group-wrapper ant-input-search"
       >

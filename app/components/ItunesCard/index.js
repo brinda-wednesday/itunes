@@ -56,12 +56,11 @@ export function ItunesCard({ songTitle, imgSrc, songArtist, audioSrc, trackId })
 }
 
 ItunesCard.propTypes = {
-  songTitle: PropTypes.string.isRequired,
-  songArtist: PropTypes.string.isRequired,
-  imgSrc: PropTypes.string.isRequired,
-  audioSrc: PropTypes.string.isRequired,
-
-  trackId: PropTypes.number.isRequired
+  songTitle: PropTypes.string,
+  songArtist: PropTypes.string,
+  imgSrc: PropTypes.string,
+  audioSrc: PropTypes.string,
+  trackId: PropTypes.number
 };
 
 export default ItunesCard;

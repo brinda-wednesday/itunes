@@ -14,6 +14,8 @@ import { githubReposData } from '@app/utils/testData';
 
 describe('<HomeContainer /> tests', () => {
   let submitSpy;
+  let repoError = 'error';
+  let repoName = 'mac';
 
   beforeEach(() => {
     submitSpy = jest.fn();
@@ -63,14 +65,13 @@ describe('<HomeContainer /> tests', () => {
 
   it('should trigger dispatchGithubRepos on mount', async () => {
     const getGithubReposSpy = jest.fn();
-    renderProvider(<HomeContainer dispatchGithubRepos={getGithubReposSpy} repoName="mac" />);
+    renderProvider(<HomeContainer dispatchGithubRepos={getGithubReposSpy} repoName={repoName} />);
     await timeout(500);
     expect(getGithubReposSpy).toHaveBeenCalledTimes(1);
     expect(getGithubReposSpy).toBeCalledWith('mac');
   });
 
   it('should show repoError ', () => {
-    const repoError = 'error';
     const { getByText } = renderProvider(<HomeContainer reposError={repoError} />);
     expect(getByText('error')).toBeTruthy();
   });
@@ -95,5 +96,17 @@ describe('<HomeContainer /> tests', () => {
     );
     await timeout(500);
     expect(getAllByTestId('custom-card')).toHaveLength(githubReposData.items.length);
+  });
+  it('should set loading as false if loading is true, if either repodata or repoerror is present', async () => {
+    const { getByText, rerender } = renderProvider(
+      <HomeContainer dispatchGithubRepos={submitSpy} repoName={repoName} />
+    );
+    await timeout(500);
+    renderProvider(
+      <HomeContainer dispatchGithubRepos={submitSpy} reposError={repoError} repoName={repoName} />,
+      rerender
+    );
+    await timeout(500);
+    expect(getByText('error')).toBeTruthy();
   });
 });

@@ -24,9 +24,9 @@ export const getComponentStyles = (Component, props = {}) => {
   return window.getComputedStyle(componentRoots[0])._values;
 };
 
-export const renderProvider = (children) => {
+export const renderProvider = (children, r = render) => {
   const store = configureStore({}, browserHistory).store;
-  return render(
+  return r(
     <Provider store={store}>
       <ConnectedLanguageProvider messages={translationMessages}>
         <ThemeProvider

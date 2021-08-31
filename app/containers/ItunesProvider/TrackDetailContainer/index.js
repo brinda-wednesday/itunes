@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
@@ -83,8 +83,8 @@ const CustomButton = styled(Button)`
 
 export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail, intl }) {
   const params = useParams();
-  const audioRef = React.useRef();
-
+  const audioRef = useRef();
+  const [isPlaying, setisPlaying] = useState(false);
   useEffect(() => {
     if (params.trackId) {
       dispatchTrackDetail(params.trackId);
@@ -93,9 +93,11 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail, intl
 
   const handlePlay = () => {
     audioRef.current.play();
+    setisPlaying(true);
   };
   const handlePause = () => {
     audioRef.current.pause();
+    setisPlaying(false);
   };
   const handleIncreaseFiveSec = () => {
     audioRef.current.currentTime += 5;
@@ -123,46 +125,53 @@ export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail, intl
             <Audio controls ref={audioRef}>
               <Source data-testid="audio-src" src={trackData.previewUrl} />
             </Audio>
-            <Tooltip title={intl.formatMessage({ id: 'play' })}>
-              <CustomButton
-                data-testid="play-btn"
-                shape="circle"
-                size="large"
-                icon={<PlayCircleOutlined />}
-                onClick={handlePlay}
-              />
-            </Tooltip>
-            <Tooltip title={intl.formatMessage({ id: 'pause' })}>
-              <CustomButton
-                type="primary"
-                shape="circle"
-                size="large"
-                data-testid="pause-btn"
-                icon={<PauseCircleOutlined />}
-                onClick={handlePause}
-              />
-            </Tooltip>
-            <Tooltip title={intl.formatMessage({ id: 'forward' })}>
-              <CustomButton
-                type="primary"
-                shape="circle"
-                size="large"
-                data-testid="forward-btn"
-                icon={<StepForwardOutlined />}
-                onClick={handleIncreaseFiveSec}
-              />
-            </Tooltip>
-            <Tooltip title={intl.formatMessage({ id: 'playbackrate' })}>
-              <CustomButton
-                type="primary"
-                shape="circle"
-                size="large"
-                data-testid="playback-btn"
-                icon={<CaretDownOutlined />}
-                onClick={handlePlaybackrate}
-              />
-            </Tooltip>
-
+            <If condition={!isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'play' })}>
+                <CustomButton
+                  data-testid="play-btn"
+                  shape="circle"
+                  size="large"
+                  icon={<PlayCircleOutlined />}
+                  onClick={handlePlay}
+                />
+              </Tooltip>
+            </If>
+            <If condition={isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'pause' })}>
+                <CustomButton
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  data-testid="pause-btn"
+                  icon={<PauseCircleOutlined />}
+                  onClick={handlePause}
+                />
+              </Tooltip>
+            </If>
+            <If condition={isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'forward' })}>
+                <CustomButton
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  data-testid="forward-btn"
+                  icon={<StepForwardOutlined />}
+                  onClick={handleIncreaseFiveSec}
+                />
+              </Tooltip>
+            </If>
+            <If condition={isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'playbackrate' })}>
+                <CustomButton
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  data-testid="playback-btn"
+                  icon={<CaretDownOutlined />}
+                  onClick={handlePlaybackrate}
+                />
+              </Tooltip>
+            </If>
             <Popover content={content}>
               <CustomButton> {intl.formatMessage({ id: 'more' })}</CustomButton>
             </Popover>

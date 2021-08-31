@@ -43,6 +43,7 @@ const ProtectedRoute = ({ render: C, isLoggedIn, handleLogout, ...rest }) => {
         return <C {...renderProps} />;
       }
     }
+
     return guardedRedirection(to, renderProps);
   };
   return <Route {...rest} render={handleRedirection} />;

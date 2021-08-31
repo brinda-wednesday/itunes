@@ -48,11 +48,11 @@ export function HomeContainer({
 }) {
   const [loading, setLoading] = React.useState(false);
   useEffect(() => {
-    const loaded = get(reposData, 'items', null) || reposError;
+    const loaded = get(reposData, 'items', reposError);
     if (loading && loaded) {
       setLoading(false);
     }
-  }, [reposData]);
+  }, [reposData, reposError]);
   useEffect(() => {
     if (repoName && !reposData?.items?.length) {
       dispatchGithubRepos(repoName);
@@ -74,23 +74,6 @@ export function HomeContainer({
 
   const items = get(reposData, 'items', []);
   const totalCount = get(reposData, 'totalCount', 0);
-
-  const renderErrorState = () => {
-    let repoError;
-    if (reposError) {
-      repoError = reposError;
-    } else if (!get(reposData, 'totalCount', 0)) {
-      repoError = 'respo_search_default';
-    }
-    return (
-      !loading &&
-      repoError && (
-        <Card color={reposError ? 'red' : 'grey'} title={intl.formatMessage({ id: 'repo_list' })}>
-          <T id={repoError} />
-        </Card>
-      )
-    );
-  };
 
   const refreshPage = () => {
     history.push('/stories');
@@ -143,7 +126,9 @@ export function HomeContainer({
           </Skeleton>
         </Card>
       </If>
-      {renderErrorState()}
+      <If condition={reposError && !loading}>
+        <T id={reposError} />
+      </If>
     </Container>
   );
 }
