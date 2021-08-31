@@ -20,7 +20,7 @@ import styled from 'styled-components';
 import { primarygrey } from '@app/themes/colors';
 import If from '@app/components/If/index';
 import { Card, Typography, Button, Tooltip, Popover } from 'antd';
-import { T } from '@app/components/T/index';
+import { T } from '@app/components/T';
 
 import { PlayCircleOutlined, PauseCircleOutlined, StepForwardOutlined, CaretDownOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
