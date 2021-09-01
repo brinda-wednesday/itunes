@@ -13,7 +13,7 @@ import styled from 'styled-components';
 const StyledCard = styled(Card)`
   && {
     margin: 20px 0;
-    max-width: ${(props) => props.maxWidth} ? ${(props) => props.maxwidth}px : 900px;
+    max-width: ${(props) => props.maxWidth ?? 900}px;
     color: grey;
   }
 `;

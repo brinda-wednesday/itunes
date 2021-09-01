@@ -4,7 +4,7 @@ exports[`<CustomCard /> should render and match the snapshot 1`] = `
 <body>
   <div>
     <div
-      class="ant-card ant-card-bordered CustomCard__StyledCard-sc-19zlds6-0 jTcFqr"
+      class="ant-card ant-card-bordered CustomCard__StyledCard-sc-19zlds6-0 cgGzzh"
       data-testid="custom-card"
     >
       <div

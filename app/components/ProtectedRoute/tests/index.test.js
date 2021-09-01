@@ -4,7 +4,7 @@ import ProtectedRoute from '../index';
 import '@testing-library/jest-dom';
 import { BrowserRouter, Router } from 'react-router-dom';
 import HomeContainer from '@app/containers/HomeContainer';
-import { createMemoryHistory } from 'history';
+import { createBrowserHistory } from 'history';
 
 jest.mock('@utils/routeConstants', () => {
   return {
@@ -56,17 +56,20 @@ describe('<ProtectedRoute />', () => {
   });
   // '/login' not protected, logged in - false - render comp
   it('should render component , not logged in, unprotected route', () => {
-    const { queryByTestId } = renderProvider(
+    const history = createBrowserHistory();
+    renderProvider(
       <BrowserRouter>
-        <ProtectedRoute isLoggedIn={false} render={HomeContainer} exact={true} path="/login" />
+        <Router history={history}>
+          <ProtectedRoute isLoggedIn={false} render={HomeContainer} exact={true} path="/login" />
+        </Router>
       </BrowserRouter>
     );
-    expect(queryByTestId('clickable')).toBeInTheDocument();
+    expect(history.location.pathname).toBe('/login');
   });
 
   // '/login' not protected, logged in true - redirect to protected
   it('should redirect to the dashboard if logged in and accessing login page(unprotected)', () => {
-    const history = createMemoryHistory();
+    const history = createBrowserHistory();
     renderProvider(
       <BrowserRouter>
         <Router history={history}>
