@@ -79,15 +79,4 @@ describe('<ProtectedRoute />', () => {
     );
     expect(history.location.pathname).toBe('/');
   });
-  it('should redirect to the dashboard if logged in and accessing login page(unprotected) with same path', () => {
-    const history = createBrowserHistory();
-    renderProvider(
-      <BrowserRouter>
-        <Router history={history}>
-          <ProtectedRoute isLoggedIn={true} render={HomeContainer} path="/" />
-        </Router>
-      </BrowserRouter>
-    );
-    expect(history.location.pathname).toBe('/');
-  });
 });
