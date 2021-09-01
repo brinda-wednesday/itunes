@@ -8,10 +8,12 @@
 import React from 'react';
 import { timeout, renderProvider } from '@utils/testUtils';
 import { fireEvent } from '@testing-library/dom';
-import { ITunesTest as ITunes } from '../index';
+import { ITunesTest as ITunes, mapDispatchToProps } from '../index';
 import 'jest-styled-components';
 import { testItunesData } from '@app/utils/testData';
 import { BrowserRouter } from 'react-router-dom';
+import { iTunesTypes } from '@app/containers/ItunesProvider/reducer';
+
 describe('<ITunes /> container tests', () => {
   let submitSpy;
 
@@ -52,6 +54,13 @@ describe('<ITunes /> container tests', () => {
     await timeout(500);
     expect(submitSpy).toBeCalled();
   });
+  it('should call dispatchSongs on mount', async () => {
+    renderProvider(<ITunes dispatchSongs={submitSpy} songName="faded" />);
+    await timeout(500);
+    expect(submitSpy).toBeCalled();
+    expect(submitSpy).toBeCalledWith('faded');
+  });
+
   it('should render grid', () => {
     const { getAllByTestId } = renderProvider(
       <BrowserRouter>
@@ -67,5 +76,23 @@ describe('<ITunes /> container tests', () => {
       </BrowserRouter>
     );
     expect(getAllByTestId('itunes-card')).toHaveLength(5);
+  });
+  it('should  dispatchSongs when songName is passed', () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).dispatchSongs({ songName: 'faded' });
+    expect(dispatch).toHaveBeenCalled();
+  });
+  it('should dispatchClearSongs when songName is empty', () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).dispatchClearSongs();
+    expect(dispatch.mock.calls[0][0]).toEqual({ type: iTunesTypes.CLEAR_ITUNES_SONGS });
+  });
+
+  it('should set loading as false if loading is true, if either songdata or songerror is present', async () => {
+    const { getByText, rerender } = renderProvider(<ITunes dispatchSongs={submitSpy} songName="faded" />);
+    await timeout(500);
+    renderProvider(<ITunes dispatchSongs={submitSpy} songError="error" songName="faded" />, rerender);
+    await timeout(500);
+    expect(getByText('error')).toBeTruthy();
   });
 });

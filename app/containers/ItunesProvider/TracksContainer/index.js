@@ -7,7 +7,7 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { injectIntl, FormattedMessage as T } from 'react-intl';
+import { injectIntl } from 'react-intl';
 
 import { createStructuredSelector } from 'reselect';
 import { compose } from 'redux';
@@ -33,6 +33,7 @@ import { injectSaga } from 'redux-injectors';
 import ItunesCard from '@app/components/ItunesCard/index';
 import If from '@app/components/If/index';
 import { Link } from 'react-router-dom';
+import { T } from '@components/T';
 
 const { Search } = Input;
 
@@ -55,7 +56,7 @@ const Container = styled.div`
 `;
 
 export function iTunes({
-  songData = [],
+  songData = {},
   songError = null,
   songName,
   dispatchSongs,
@@ -64,7 +65,6 @@ export function iTunes({
   trackDetail = null
 }) {
   const [loading, setLoading] = useState(false);
-
   const items = get(songData, 'results', []);
 
   const handleOnChange = (sName) => {
@@ -103,7 +103,7 @@ export function iTunes({
       <If condition={items.length !== 0 || loading}>
         <GridLayout data-testid="grid">
           {items.map((item, index) => (
-            <Link key={index} to={`/itunes/${item.trackId}`}>
+            <Link key={index} to={`/${item.trackId}`}>
               <ItunesCard
                 data-testid="itunes-card"
                 songTitle={item.trackName}
@@ -116,6 +116,9 @@ export function iTunes({
           ))}
         </GridLayout>
       </If>
+      <If condition={songError && !loading}>
+        <T id={songError} />
+      </If>
     </Container>
   );
 }
@@ -124,7 +127,6 @@ iTunes.propTypes = {
   dispatchSongs: PropTypes.func,
   dispatchClearSongs: PropTypes.func,
   intl: PropTypes.object,
-  songData: PropTypes.object,
   songError: PropTypes.object,
   songName: PropTypes.string
 };
@@ -139,7 +141,7 @@ const mapStateToProps = createStructuredSelector({
   trackError: selectTrackError()
 });
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   const { requestGetItunesSongs, clearItunesSongs } = iTunesCreators;
   return {
     dispatchSongs: (songName) => dispatch(requestGetItunesSongs(songName)),

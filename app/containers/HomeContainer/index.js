@@ -1,4 +1,4 @@
-import React, { useEffect, memo, useState } from 'react';
+import React, { useEffect, memo } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
@@ -16,17 +16,12 @@ import { injectSaga } from 'redux-injectors';
 import { selectHomeContainer, selectReposData, selectReposError, selectRepoName } from './selectors';
 import { homeContainerCreators } from './reducer';
 import homeContainerSaga from './saga';
+import If from '@app/components/If/index';
+import CustomCard from '@app/components/CustomCard';
+import For from '@app/components/For/index';
 
 const { Search } = Input;
 
-const CustomCard = styled(Card)`
-  && {
-    margin: 20px 0;
-    max-width: ${(props) => props.maxwidth};
-    color: ${(props) => props.color};
-    ${(props) => props.color && `color: ${props.color}`};
-  }
-`;
 const Container = styled.div`
   && {
     display: flex;
@@ -51,15 +46,13 @@ export function HomeContainer({
   maxwidth,
   padding
 }) {
-  const [loading, setLoading] = useState(false);
-
+  const [loading, setLoading] = React.useState(false);
   useEffect(() => {
-    const loaded = get(reposData, 'items', null) || reposError;
+    const loaded = get(reposData, 'items', reposError);
     if (loading && loaded) {
       setLoading(false);
     }
-  }, [reposData]);
-
+  }, [reposData, reposError]);
   useEffect(() => {
     if (repoName && !reposData?.items?.length) {
       dispatchGithubRepos(repoName);
@@ -79,72 +72,63 @@ export function HomeContainer({
   };
   const debouncedHandleOnChange = debounce(handleOnChange, 200);
 
-  const renderRepoList = () => {
-    const items = get(reposData, 'items', []);
-    const totalCount = get(reposData, 'totalCount', 0);
-    return (
-      (items.length !== 0 || loading) && (
-        <CustomCard>
-          <Skeleton loading={loading} active>
-            {repoName && (
-              <div>
-                <T id="search_query" values={{ repoName }} />
-              </div>
-            )}
-            {totalCount !== 0 && (
-              <div>
-                <T id="matching_repos" values={{ totalCount }} />
-              </div>
-            )}
-            {items.map((item, index) => (
-              <CustomCard key={index}>
-                <T id="repository_name" values={{ name: item.name }} />
-                <T id="repository_full_name" values={{ fullName: item.fullName }} />
-                <T id="repository_stars" values={{ stars: item.stargazersCount }} />
-              </CustomCard>
-            ))}
-          </Skeleton>
-        </CustomCard>
-      )
-    );
-  };
-  const renderErrorState = () => {
-    let repoError;
-    if (reposError) {
-      repoError = reposError;
-    } else if (!get(reposData, 'totalCount', 0)) {
-      repoError = 'respo_search_default';
-    }
-    return (
-      !loading &&
-      repoError && (
-        <CustomCard color={reposError ? 'red' : 'grey'} title={intl.formatMessage({ id: 'repo_list' })}>
-          <T id={repoError} />
-        </CustomCard>
-      )
-    );
-  };
+  const items = get(reposData, 'items', []);
+  const totalCount = get(reposData, 'totalCount', 0);
+
   const refreshPage = () => {
-    history.push('stories');
+    history.push('/stories');
     window.location.reload();
   };
+
   return (
     <Container maxwidth={maxwidth} padding={padding}>
       <RightContent>
         <Clickable textId="stories" onClick={refreshPage} />
       </RightContent>
-      <CustomCard title={intl.formatMessage({ id: 'repo_search' })} maxwidth={maxwidth}>
+      <Card title={intl.formatMessage({ id: 'repo_search' })} maxwidth={maxwidth}>
         <T marginBottom={10} id="get_repo_details" />
         <Search
           data-testid="search-bar"
           defaultValue={repoName}
           type="text"
           onChange={(evt) => debouncedHandleOnChange(evt.target.value)}
-          onSearch={(searchText) => debouncedHandleOnChange(searchText)}
         />
-      </CustomCard>
-      {renderRepoList()}
-      {renderErrorState()}
+      </Card>
+
+      <If condition={items.length || loading}>
+        <Card>
+          <Skeleton loading={loading} active>
+            <If condition={repoName}>
+              <div>
+                <T id="search_query" values={{ repoName }} />
+              </div>
+            </If>
+            <If condition={totalCount !== 0}>
+              <div>
+                <T id="matching_repos" values={{ totalCount }} />
+              </div>
+            </If>
+            <For
+              of={items}
+              isRow={false}
+              renderItem={(item, index) => {
+                return (
+                  <CustomCard
+                    data-testid="custom-card"
+                    key={index}
+                    name={item.name}
+                    fullName={item.fullName}
+                    stargazersCount={item.stargazersCount}
+                  />
+                );
+              }}
+            />
+          </Skeleton>
+        </Card>
+      </If>
+      <If condition={reposError && !loading}>
+        <T id={reposError} />
+      </If>
     </Container>
   );
 }
@@ -177,7 +161,7 @@ const mapStateToProps = createStructuredSelector({
   repoName: selectRepoName()
 });
 
-function mapDispatchToProps(dispatch) {
+export function mapDispatchToProps(dispatch) {
   const { requestGetGithubRepos, clearGithubRepos } = homeContainerCreators;
   return {
     dispatchGithubRepos: (repoName) => dispatch(requestGetGithubRepos(repoName)),

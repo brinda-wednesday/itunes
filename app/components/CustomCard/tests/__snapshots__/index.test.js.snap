@@ -1,0 +1,35 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<CustomCard /> should render and match the snapshot 1`] = `
+<body>
+  <div>
+    <div
+      class="ant-card ant-card-bordered CustomCard__StyledCard-sc-19zlds6-0 cgGzzh"
+      data-testid="custom-card"
+    >
+      <div
+        class="ant-card-body"
+      >
+        <p
+          class="T__StyledText-gjlic1-0 kYcyRq"
+          data-testid="repo-name"
+        >
+          Repository Name: 
+        </p>
+        <p
+          class="T__StyledText-gjlic1-0 kYcyRq"
+          data-testid="full-name"
+        >
+          Repository full name: 
+        </p>
+        <p
+          class="T__StyledText-gjlic1-0 kYcyRq"
+          data-testid="stargazer-count"
+        >
+          Repository stars: 
+        </p>
+      </div>
+    </div>
+  </div>
+</body>
+`;

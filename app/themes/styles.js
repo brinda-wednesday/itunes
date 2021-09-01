@@ -101,14 +101,13 @@ const boxShadow = (hOffset = 0, vOffset = 0, blur = 0, spread = 0, color = '#ccc
 
 const primaryBackgroundColor = () =>
   css`
-    background-color: ${colors.accent};
+    background-color: ${colors.primary};
   `;
 
-const zIndex = (z = 1) => {
+const zIndex = (z = 1) =>
   css`
     z-index: ${z};
   `;
-};
 const textEllipsis = (width = '200px') => css`
   white-space: nowrap;
   overflow: hidden;
@@ -132,6 +131,7 @@ export default {
   borderRadiusBottom,
   borderRadiusTop,
   primaryBackgroundColor,
+  configureFlex,
   flexConfig: {
     row,
     column,

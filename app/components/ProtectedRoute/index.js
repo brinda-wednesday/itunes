@@ -9,7 +9,7 @@ import { Redirect, Route } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import routeConstants from '@utils/routeConstants';
 
-const ProtectedRoute = ({ isUserVerified, render: C, isLoggedIn, handleLogout, ...rest }) => {
+const ProtectedRoute = ({ render: C, isLoggedIn, handleLogout, ...rest }) => {
   const isUnprotectedRoute =
     Object.keys(routeConstants)
       .filter((key) => !routeConstants[key].isProtected)
@@ -17,9 +17,6 @@ const ProtectedRoute = ({ isUserVerified, render: C, isLoggedIn, handleLogout, .
       .includes(rest.path) && rest.exact;
 
   const guardedRedirection = (to, renderProps) => {
-    if (rest.path === to) {
-      return <C {...renderProps} />;
-    }
     return <Redirect to={to} />;
   };
 
@@ -34,7 +31,7 @@ const ProtectedRoute = ({ isUserVerified, render: C, isLoggedIn, handleLogout, .
         // not logged in and trying to access an unprotected route so don't redirect
         return <C {...renderProps} />;
       }
-    } else if (isLoggedIn) {
+    } else {
       // user is logged in
       if (isUnprotectedRoute) {
         to = routeConstants.dashboard.route;
@@ -43,6 +40,7 @@ const ProtectedRoute = ({ isUserVerified, render: C, isLoggedIn, handleLogout, .
         return <C {...renderProps} />;
       }
     }
+
     return guardedRedirection(to, renderProps);
   };
   return <Route {...rest} render={handleRedirection} />;
@@ -51,7 +49,6 @@ const ProtectedRoute = ({ isUserVerified, render: C, isLoggedIn, handleLogout, .
 ProtectedRoute.propTypes = {
   render: PropTypes.any,
   isLoggedIn: PropTypes.bool,
-  isUserVerified: PropTypes.bool,
   handleLogout: PropTypes.func
 };
 

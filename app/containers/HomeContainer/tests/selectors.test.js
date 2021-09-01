@@ -23,6 +23,7 @@ describe('HomeContainer selector tests', () => {
     const homeContainerSelector = selectHomeContainer();
     expect(homeContainerSelector(mockedState)).toEqual(mockedState.homeContainer);
   });
+
   it('should select the repoName', () => {
     const repoSelector = selectRepoName();
     expect(repoSelector(mockedState)).toEqual(repoName);

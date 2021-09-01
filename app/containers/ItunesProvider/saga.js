@@ -19,11 +19,17 @@ export function* getiTunesSongs(action) {
 export function* getiTuneTrackDetail(action) {
   const state = yield select(selectSongData());
   const results = state.results;
-  const response = results.filter((item) => item.trackId == action.trackDetail);
-  if (response) {
+  const response = results.filter((item) => item.trackId === action.trackDetail);
+  if (response.length) {
     yield put(successGetItuneDetail(response[0]));
   } else {
-    yield put(failureGetItuneDetail(response));
+    const response = yield call(getSongs, action.trackDetail);
+    const { data, ok } = response;
+    if (ok) {
+      yield put(successGetItuneDetail(data.results[0]));
+    } else {
+      yield put(failureGetItuneDetail(data));
+    }
   }
 }
 

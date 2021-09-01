@@ -189,3 +189,24 @@ export const testItunesData = {
     }
   ]
 };
+
+export const githubReposData = {
+  totalCount: 3,
+  items: [
+    {
+      fullName: 'qianguyihao/Mac',
+      name: 'Mac',
+      stargazersCount: 1546
+    },
+    {
+      fullName: 'abc',
+      name: 'abc',
+      stargazersCount: 1345
+    },
+    {
+      fullName: 'cdf',
+      name: 'cdf',
+      stargazersCount: 13
+    }
+  ]
+};

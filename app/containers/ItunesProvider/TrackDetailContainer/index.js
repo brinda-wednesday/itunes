@@ -4,7 +4,7 @@
  *
  */
 
-import React, { memo, useEffect } from 'react';
+import React, { memo, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { injectIntl } from 'react-intl';
@@ -19,8 +19,10 @@ import iTunesSaga from '../saga';
 import styled from 'styled-components';
 import { primarygrey } from '@app/themes/colors';
 import If from '@app/components/If/index';
-import { Card, Typography } from 'antd';
+import { Card, Typography, Button, Tooltip, Popover } from 'antd';
+import { T } from '@app/components/T';
 
+import { PlayCircleOutlined, PauseCircleOutlined, StepForwardOutlined, CaretDownOutlined } from '@ant-design/icons';
 const { Title, Text } = Typography;
 const { Meta } = Card;
 const Container = styled.div`
@@ -44,7 +46,9 @@ const CustomCard = styled(Card)`
     width: 80em;
     border-radius: 2em;
     display: flex;
+    justify-content: center;
     background-color: ${primarygrey};
+    padding: 3em;
   }
 `;
 const Audio = styled.audio`
@@ -69,33 +73,117 @@ const CustomTitle = styled(Title)`
     color: blue;
   }
 `;
+const CustomButton = styled(Button)`
+  && {
+    background-color: black;
+    color: aqua;
+    margin: 0.5em;
+  }
+`;
 
-export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail }) {
+export function TrackDetailContainer({ trackData = {}, dispatchTrackDetail, intl }) {
   const params = useParams();
-
+  const audioRef = useRef();
+  const [isPlaying, setisPlaying] = useState(false);
   useEffect(() => {
     if (params.trackId) {
       dispatchTrackDetail(params.trackId);
     }
   }, []);
 
+  const handlePlay = () => {
+    audioRef.current.play();
+    setisPlaying(true);
+  };
+  const handlePause = () => {
+    audioRef.current.pause();
+    setisPlaying(false);
+  };
+  const handleIncreaseFiveSec = () => {
+    audioRef.current.currentTime += 5;
+  };
+  const handlePlaybackrate = () => {
+    audioRef.current.playbackRate = 0.5;
+  };
+  const content = (
+    <>
+      <CustomText> {intl.formatMessage({ id: 'collection-name' }, { name: trackData.collectionName })}</CustomText>
+      <CustomText>{intl.formatMessage({ id: 'genre' }, { genre: trackData.primaryGenreName })}</CustomText>
+      <CustomText italic type="success">
+        {intl.formatMessage({ id: 'price' }, { price: trackData.trackPrice })}
+      </CustomText>
+    </>
+  );
+
   return (
-    <If condition={!isEmpty(trackData)}>
-      <Container data-testid="container">
-        <CustomCard data-testid="track-card" cover={<Image alt="example" src={trackData.artworkUrl100} />}>
-          <CustomTitle level={5}>{trackData.kind}</CustomTitle>
-          <Meta title={trackData.trackName} description={trackData.artistName} />
-          <Audio controls>
-            <Source data-testid="audio-src" src={trackData.previewUrl} />
-          </Audio>
-          <CustomText> Collection Name : {trackData.collectionName}</CustomText>
-          <CustomText data-testid="genre">Genre : {trackData.primaryGenreName}</CustomText>
-          <CustomText data-testid="price" italic type="success">
-            Price : ${trackData.trackPrice}
-          </CustomText>
-        </CustomCard>
-      </Container>
-    </If>
+    <>
+      <If condition={!isEmpty(trackData)}>
+        <Container data-testid="container">
+          <CustomCard data-testid="track-card" cover={<Image alt="example" src={trackData.artworkUrl100} />}>
+            <CustomTitle level={5}>{trackData.kind}</CustomTitle>
+            <Meta title={trackData.trackName} description={trackData.artistName} />
+            <Audio controls ref={audioRef}>
+              <Source data-testid="audio-src" src={trackData.previewUrl} />
+            </Audio>
+            <If condition={!isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'play' })}>
+                <CustomButton
+                  data-testid="play-btn"
+                  shape="circle"
+                  size="large"
+                  icon={<PlayCircleOutlined />}
+                  onClick={handlePlay}
+                />
+              </Tooltip>
+            </If>
+            <If condition={isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'pause' })}>
+                <CustomButton
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  data-testid="pause-btn"
+                  icon={<PauseCircleOutlined />}
+                  onClick={handlePause}
+                />
+              </Tooltip>
+            </If>
+            <If condition={isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'forward' })}>
+                <CustomButton
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  data-testid="forward-btn"
+                  icon={<StepForwardOutlined />}
+                  onClick={handleIncreaseFiveSec}
+                />
+              </Tooltip>
+            </If>
+            <If condition={isPlaying}>
+              <Tooltip title={intl.formatMessage({ id: 'playbackrate' })}>
+                <CustomButton
+                  type="primary"
+                  shape="circle"
+                  size="large"
+                  data-testid="playback-btn"
+                  icon={<CaretDownOutlined />}
+                  onClick={handlePlaybackrate}
+                />
+              </Tooltip>
+            </If>
+            <Popover content={content}>
+              <CustomButton> {intl.formatMessage({ id: 'more' })}</CustomButton>
+            </Popover>
+          </CustomCard>
+        </Container>
+      </If>
+      <If condition={isEmpty(trackData)}>
+        <Container>
+          <T id="not-found" data-testid="not-found" />
+        </Container>
+      </If>
+    </>
   );
 }
 
@@ -103,6 +191,7 @@ TrackDetailContainer.propTypes = {
   dispatchTrackDetail: PropTypes.func,
   trackDetail: PropTypes.string,
   trackData: PropTypes.object,
+  intl: PropTypes.object,
   trackError: PropTypes.string
 };
 
@@ -121,6 +210,11 @@ export function mapDispatchToProps(dispatch) {
 
 const withConnect = connect(mapStateToProps, mapDispatchToProps);
 
-export default compose(withConnect, memo, injectSaga({ key: 'iTunes', saga: iTunesSaga }))(TrackDetailContainer);
+export default compose(
+  injectIntl,
+  withConnect,
+  memo,
+  injectSaga({ key: 'iTunes', saga: iTunesSaga })
+)(TrackDetailContainer);
 
 export const TrackDetailContainerTest = compose(injectIntl)(TrackDetailContainer);
