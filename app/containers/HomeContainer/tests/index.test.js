@@ -68,7 +68,7 @@ describe('<HomeContainer /> tests', () => {
     renderProvider(<HomeContainer dispatchGithubRepos={getGithubReposSpy} repoName={repoName} />);
     await timeout(500);
     expect(getGithubReposSpy).toHaveBeenCalledTimes(1);
-    expect(getGithubReposSpy).toBeCalledWith('mac');
+    expect(getGithubReposSpy).toBeCalledWith(repoName);
   });
 
   it('should show repoError ', () => {

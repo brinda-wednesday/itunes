@@ -17,9 +17,6 @@ const ProtectedRoute = ({ render: C, isLoggedIn, handleLogout, ...rest }) => {
       .includes(rest.path) && rest.exact;
 
   const guardedRedirection = (to, renderProps) => {
-    if (rest.path === to) {
-      return <C {...renderProps} />;
-    }
     return <Redirect to={to} />;
   };
 
@@ -34,7 +31,7 @@ const ProtectedRoute = ({ render: C, isLoggedIn, handleLogout, ...rest }) => {
         // not logged in and trying to access an unprotected route so don't redirect
         return <C {...renderProps} />;
       }
-    } else if (isLoggedIn) {
+    } else {
       // user is logged in
       if (isUnprotectedRoute) {
         to = routeConstants.dashboard.route;
